@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WARUNG DSG - Dashboard Admin</title>
+    <title>B2F STASH - Dashboard Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -4771,11 +4771,11 @@ function checkoutFromFloating() {
                 bell.classList.add('has-notifications');
                 
                 // Update page title with notification count
-                document.title = `(${unreadCount}) WARUNG DSG - Dashboard Admin`;
+                document.title = `(${unreadCount}) B2F STASH - Dashboard Admin`;
             } else {
                 badge.style.display = 'none';
                 bell.classList.remove('has-notifications');
-                document.title = 'WARUNG DSG - Dashboard Admin';
+                document.title = 'B2F STASH - Dashboard Admin';
             }
             
             // Update counter in localStorage
@@ -8391,7 +8391,7 @@ function showReceiptPopup(orderId, orderData) {
     // Buat konten struk
     let receiptContent = `
 ================================
-WARUNG DSG STORE RECEIPT
+B2F STASH RECEIPT
 ================================
 No. Pesanan: ${orderId}
 Tanggal: ${formattedDate}
@@ -8451,7 +8451,7 @@ Terima kasih telah berbelanja!
                 }
             }, 30000); // Update every 30 seconds
         
-        console.log("🎉 WARUNG DSG Store Admin Dashboard initialized successfully!");
+        console.log("🎉 B2F STASH Admin Dashboard initialized successfully!");
     </script>
 </body>
 </html>
