@@ -15,18 +15,18 @@
     
     <style>
         :root {
-            --primary-blue: #2b6ca3; /* soft muted blue */
-            --secondary-blue: #1f597f; /* complementary soft tone */
-            --accent-blue: #bfa44a; /* muted gold accent */
-            --light-blue: #eef6fb; /* very soft bg blue */
-            --blue-gray: #6b7280;
-            --text-dark: #123b4a; /* slightly warmer dark for better contrast */
+            --primary-blue: #a97c1c; /* rich gold tone */
+            --secondary-blue: #5d4610; /* dark bronze shade */
+            --accent-blue: #d4af37; /* bright gold accent */
+            --light-blue: #fff8e8; /* warm ivory background */
+            --blue-gray: #7e6c45;
+            --text-dark: #2f2310; /* deep warm text */
             --text-light: #ffffff;
             --success: #2f855a;
             --warning: #b7791f;
             --danger: #c53030;
-            --info: #4aa3e0;
-            --shadow: 0 6px 12px rgba(2,6,23,0.045);
+            --info: #b59b44;
+            --shadow: 0 6px 16px rgba(47, 33, 16, 0.14);
             --border-radius: 8px;
             --sidebar-width: 250px;
                 --smooth-ease: cubic-bezier(0.2, 0.9, 0.2, 1);
@@ -50,7 +50,7 @@
         /* SIDEBAR STYLES - Tetap sama */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--primary-blue), var(--secondary-blue));
+            background: linear-gradient(180deg, rgba(212,175,55,0.95), rgba(93,70,16,0.98));
             color: var(--text-light);
             padding: 25px 0;
             position: fixed;
@@ -967,19 +967,21 @@
         .btn-primary {
             background-color: var(--accent-blue);
             color: white;
+            box-shadow: 0 8px 18px rgba(212, 175, 55, 0.24);
         }
         
         .btn-primary:hover {
-            background-color: #2c5282;
+            background-color: #c49b2d;
         }
         
         .btn-secondary {
-            background-color: #e2e8f0;
+            background-color: rgba(212, 175, 55, 0.10);
             color: var(--secondary-blue);
+            border: 1px solid rgba(212, 175, 55, 0.35);
         }
         
         .btn-secondary:hover {
-            background-color: #cbd5e0;
+            background-color: rgba(212, 175, 55, 0.18);
         }
 
         /* Responsive adjustments for dark mode */
@@ -3464,11 +3466,6 @@ body.dark-mode .metalscrap-badge {
 }
 
 #pemesanan-barang input#total-kacang-ijo,
-#pemesanan-barang input#total-baggy {
-    background-color: #f8fafc;
-    border-color: #e2e8f0;
-    font-weight: 500;
-}
 
 #pemesanan-barang input#total-uang-diterima {
     background-color: #e8f5e8;
@@ -3585,11 +3582,6 @@ body.dark-mode #pemesanan-barang input[readonly] {
 }
 
 body.dark-mode #pemesanan-barang input#total-kacang-ijo,
-body.dark-mode #pemesanan-barang input#total-baggy {
-    background-color: #2d2d2d;
-    border-color: #444;
-    color: #e0e0e0;
-}
 
 body.dark-mode #pemesanan-barang input#total-uang-diterima {
     background-color: #1a2a1a;
@@ -4653,71 +4645,52 @@ body.dark-mode .detail-total {
                             </div>
                             
                             <div class="form-group short-field">
-                                <label for="gang-side">Gang Side *</label>
-                                <select id="gang-side" required>
-                                    <option value="">Pilih Side</option>
-                                    <option value="west">West Side</option>
-                                    <option value="non-west">Non-West Side</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group short-field">
-                                <label for="nama-pj">Nama PJ *</label>
-                                <select id="nama-pj" required>
-                                    <option value="">Pilih PJ</option>
-                                    <option value="PJ 1">PJ 1</option>
-                                    <option value="PJ 2">PJ 2</option>
-                                    <option value="PJ 3">PJ 3</option>
-                                </select>
+                                <label for="nama-pj">Nama PJ</label>
+                                <input type="text" id="nama-pj" placeholder="Masukkan nama PJ" style="width: 100%;">
                             </div>
                         </div>
                         
                         <!-- Pilihan Barang dengan Input Jumlah -->
                         <div class="form-group">
-                            <label>Weed</label>
+                            <label>Uang Merah</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="number" id="jumlah-kacang-ijo" min="0" value="0" placeholder="Jumlah" style="flex: 1;">
-                                <span style="color: var(--text-dark); font-weight: 500;">@ Rp 700/650</span>
+                                <input type="number" id="uang-merah" min="0" step="1000" value="0" placeholder="Jumlah (Rp)" style="flex: 1;">
+                                <span style="color: var(--text-dark); font-weight: 500;">Dipotong 10%</span>
                                 <input type="text" id="total-kacang-ijo" readonly placeholder="Total" style="flex: 1; background-color: #f8fafc;">
                             </div>
                         </div>
-                        
                         <div class="form-group">
-                            <label>Baggy</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="number" id="jumlah-baggy" min="0" value="0" placeholder="Jumlah" style="flex: 1;">
-                                <span style="color: var(--text-dark); font-weight: 500;">@ Rp 50</span>
-                                <input type="text" id="total-baggy" readonly placeholder="Total" style="flex: 1; background-color: #f8fafc;">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="total-uang-diterima">Total Uang Diterima</label>
+                            <label for="total-uang-diterima">Total Uang Ke Customer</label>
                             <input type="text" id="total-uang-diterima" readonly placeholder="Total keseluruhan" style="background-color: #e8f5e8; border-color: var(--success); font-weight: 600; color: var(--success);">
+                            <small id="total-penjelasan" style="display:block; margin-top:6px; color:var(--blue-gray); font-size:0.85rem;">Note: Total yang kita balikin ke customer. Detail total bisa dilihat pada History Pemesanan.</small>
                         </div>
-                        
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Simpan Pemesanan
                         </button>
                     </form>
                 </div>
             </div>
-            
             <div class="table-card" style="margin-top: 20px;">
                 <div class="table-header">
                     <h3>History Pemesanan</h3>
                     <div class="summary-info">
                         <div class="total-summary">
-                            <span class="summary-label">Total Penerimaan:</span>
+                            <span class="summary-label">Total Uang to Storage:</span>
                             <span class="summary-value" id="total-penerimaan">Rp 0</span>
                         </div>
                     </div>
+                </div>
+                <div class="order-filters" id="history-filter-buttons">
+                    <button class="filter-btn active" data-filter="all" onclick="setPemesananHistoryFilter('all')">Semua</button>
+                    <button class="filter-btn" data-filter="Pending" onclick="setPemesananHistoryFilter('Pending')">Pending</button>
+                    <button class="filter-btn" data-filter="Done" onclick="setPemesananHistoryFilter('Done')">Done</button>
+                    <button class="filter-btn" data-filter="Delivered" onclick="setPemesananHistoryFilter('Delivered')">Delivered</button>
                 </div>
                 <table id="history-table" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Nama Geng</th>
-                            <th>Side</th>
+                            <th>PJ</th>
                             <th>Total Diterima</th>
                             <th>Tanggal</th>
                             <th>Status</th>
@@ -4729,10 +4702,16 @@ body.dark-mode .detail-total {
                         <!-- History akan diisi oleh JavaScript -->
                     </tbody>
                 </table>
+                <div class="pagination-controls" style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 12px; flex-wrap: wrap;">
+                    <div style="font-size: 0.95rem; color: var(--text-dark);">Menampilkan <span id="history-pagination-info">0-0 dari 0</span></div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary btn-sm" id="history-prev-btn" onclick="changePemesananHistoryPage(-1)" disabled>Prev</button>
+                        <button class="btn btn-secondary btn-sm" id="history-next-btn" onclick="changePemesananHistoryPage(1)" disabled>Next</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
     
     <!-- Modals -->
     <!-- Cart Modal -->
@@ -4843,9 +4822,14 @@ body.dark-mode .detail-total {
             <div class="modal-body">
                 <div class="detail-summary" style="margin-bottom: 16px; gap: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
                     <div><strong>Geng:</strong> <span id="detail-nama-geng"></span></div>
-                    <div><strong>PJ:</strong> <span id="detail-nama-pj"></span></div>
-                    <div><strong>Side:</strong> <span id="detail-side"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <strong>PJ:</strong>
+                        <input type="text" id="detail-nama-pj-input" placeholder="Edit PJ" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccd6dd;">
+                    </div>
                     <div><strong>Tanggal:</strong> <span id="detail-tanggal"></span></div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; gap: 10px;">
+                    <button class="btn btn-primary btn-sm" onclick="saveDetailPJ()">Simpan PJ</button>
                 </div>
                 <div style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
                     <strong>Status:</strong> <span id="detail-status" style="font-size: 1.1rem; color: var(--primary-blue);"></span>
@@ -5281,11 +5265,95 @@ const firebaseConfig = {
         
         // Pemesanan Barang
         let pemesananHistory = [];
-        const HARGA_KACANG_IJO_NORMAL = 700;
-        const HARGA_KACANG_IJO_WEST = 650;
+        let pemesananHistoryFilter = 'all';
+        let pemesananHistoryPage = 1;
+        const PEMESANAN_HISTORY_PAGE_SIZE = 10;
+        const HARGA_KACANG_IJO_NORMAL = 0.1;
+        const HARGA_KACANG_IJO_WEST = 0.1;
         const HARGA_PLASTIK_NORMAL = 700; // TODO: Sesuaikan harga plastik jika berbeda
         const HARGA_PLASTIK_WEST = 650;   // TODO: Sesuaikan harga plastik jika berbeda
         const HARGA_BAGGY = 50;
+        // Harga plastik belum ditentukan, bisa ditambahkan nanti
+
+        // Financial calculation helper (matches spreadsheet logic)
+        function formatCurrency(v) {
+            return v.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 });
+        }
+
+        function calculateOrderFinancials(opts = {}) {
+            const {
+                cardCount = 100,
+                uangMerah = 5000000,
+                potonganMerahPct = 10,
+                potonganPutihPct = 15,
+                addCostPerCard = 200, // total add cost = addCostPerCard * cardCount
+                htPct = 0.15, // percent taken by HT from B2F Get
+                storagePct = 0.10 // storage percent from After HT
+            } = opts;
+
+            const totalUangPutih = uangMerah * (1 - potonganMerahPct / 100);
+            const potonganUangPutih = totalUangPutih * (potonganPutihPct / 100);
+            const hasil = totalUangPutih - potonganUangPutih; // amount before subtracting add cost
+
+            const addCostTotal = addCostPerCard * cardCount;
+            const toCustomer = hasil - addCostTotal;
+
+            const b2fGet = potonganUangPutih; // same as 'Potongan Uang Putih'
+            const toHT = b2fGet * htPct;
+            const afterHT = b2fGet - toHT;
+            const toStorage = afterHT * storagePct;
+            const salaryAfterHT = afterHT - toStorage;
+
+            return {
+                cardCount,
+                uangMerah,
+                potonganMerahPct,
+                totalUangPutih,
+                potonganPutihPct,
+                potonganUangPutih,
+                hasil,
+                addCostPerCard,
+                addCostTotal,
+                toCustomer,
+                b2fGet,
+                htPct,
+                toHT,
+                afterHT,
+                storagePct,
+                toStorage,
+                salaryAfterHT,
+                format: function() {
+                    return {
+                        totalUangPutih: formatCurrency(this.totalUangPutih),
+                        potonganUangPutih: formatCurrency(this.potonganUangPutih),
+                        hasil: formatCurrency(this.hasil),
+                        addCostTotal: formatCurrency(this.addCostTotal),
+                        toCustomer: formatCurrency(this.toCustomer),
+                        b2fGet: formatCurrency(this.b2fGet),
+                        toHT: formatCurrency(this.toHT),
+                        afterHT: formatCurrency(this.afterHT),
+                        toStorage: formatCurrency(this.toStorage),
+                        salaryAfterHT: formatCurrency(this.salaryAfterHT)
+                    };
+                }
+            };
+        }
+
+        // Expose helper globally for console / UI usage
+        window.calculateOrderFinancials = calculateOrderFinancials;
+
+        // Example using values from your spreadsheet image
+        const sampleCalc = calculateOrderFinancials({
+            cardCount: 100,
+            uangMerah: 5000000,
+            potonganMerahPct: 10,
+            potonganPutihPct: 15,
+            addCostPerCard: 200,
+            htPct: 0.15,
+            storagePct: 0.10
+        });
+        console.log('Sample pemesanan kalkulasi (raw):', sampleCalc);
+        console.log('Sample pemesanan kalkulasi (formatted):', sampleCalc.format());
         // Harga plastik belum ditentukan, bisa ditambahkan nanti
         
         // Notification system
@@ -9623,106 +9691,111 @@ Terima kasih telah berbelanja!
         
         function setupPemesananEventListeners() {
             const form = document.getElementById('pemesanan-form');
-            const gangSide = document.getElementById('gang-side');
-            const jumlahKacangIjo = document.getElementById('jumlah-kacang-ijo');
-            const jumlahBaggy = document.getElementById('jumlah-baggy');
+            const uangMerah = document.getElementById('uang-merah');
             
             if (form) {
                 form.addEventListener('submit', handlePemesananSubmit);
             }
             
-            if (gangSide) {
-                gangSide.addEventListener('change', calculateTotalHarga);
-            }
-            
-            if (jumlahKacangIjo) {
-                jumlahKacangIjo.addEventListener('input', calculateTotalHarga);
-            }
-            
-            if (jumlahBaggy) {
-                jumlahBaggy.addEventListener('input', calculateTotalHarga);
+            if (uangMerah) {
+                uangMerah.addEventListener('input', calculateTotalHarga);
             }
         }
         
         function calculateTotalHarga() {
-            const gangSide = document.getElementById('gang-side').value;
-            const jumlahKacangIjo = parseInt(document.getElementById('jumlah-kacang-ijo').value) || 0;
-            const jumlahBaggy = parseInt(document.getElementById('jumlah-baggy').value) || 0;
+            const uangMerah = parseFloat(document.getElementById('uang-merah')?.value) || 0;
+            const jumlahBaggy = parseInt(document.getElementById('jumlah-baggy')?.value) || 0;
 
-            if (!gangSide) {
-                document.getElementById('total-kacang-ijo').value = '';
-                document.getElementById('total-baggy').value = '';
-                document.getElementById('total-uang-diterima').value = '';
-                return;
-            }
-            
-            // Hitung harga kacang ijo berdasarkan side
-            const hargaKacangIjo = gangSide === 'west' ? HARGA_KACANG_IJO_WEST : HARGA_KACANG_IJO_NORMAL;
-            const totalKacangIjo = hargaKacangIjo * jumlahKacangIjo;
-            
-            // Hitung harga baggy (tetap)
-            const totalBaggy = HARGA_BAGGY * jumlahBaggy;
-            
-            // Total keseluruhan
-            const totalUangDiterima = totalKacangIjo + totalBaggy;
-            
-            // Update display
-            document.getElementById('total-kacang-ijo').value = `Rp ${totalKacangIjo.toLocaleString('id-ID')}`;
-            document.getElementById('total-baggy').value = `Rp ${totalBaggy.toLocaleString('id-ID')}`;
-            document.getElementById('total-uang-diterima').value = `Rp ${totalUangDiterima.toLocaleString('id-ID')}`;
+            // Determine nearest card count from uang input (1 card = Rp50.000)
+            const UANG_MERAH_PER_CARD = 50000;
+            const cardCount = Math.round(uangMerah / UANG_MERAH_PER_CARD);
+
+            // Use shared helper to compute full breakdown using uangMerah directly
+            const financials = calculateOrderFinancials({
+                cardCount,
+                uangMerah,
+                potonganMerahPct: 10,
+                potonganPutihPct: 15,
+                addCostPerCard: 200,
+                htPct: 0.15,
+                storagePct: 0.10
+            });
+
+            // Baggy calculation (kept separate)
+            const totalBaggy = (typeof HARGA_BAGGY !== 'undefined') ? HARGA_BAGGY * jumlahBaggy : 0;
+
+            // Update display fields
+            document.getElementById('total-kacang-ijo').value = formatCurrency(financials.totalUangPutih);
+            if (document.getElementById('total-baggy')) document.getElementById('total-baggy').value = formatCurrency(totalBaggy);
+            document.getElementById('total-uang-diterima').value = formatCurrency(financials.toCustomer);
         }
         
         async function handlePemesananSubmit(e) {
             e.preventDefault();
             
             const namaGeng = document.getElementById('nama-geng').value.trim();
-            const gangSide = document.getElementById('gang-side').value;
             const namaPJ = document.getElementById('nama-pj').value;
-            const jumlahKacangIjo = parseInt(document.getElementById('jumlah-kacang-ijo').value) || 0;
-            const jumlahBaggy = parseInt(document.getElementById('jumlah-baggy').value) || 0;
-            
-            if (!gangSide) {
-                showNotification('error', 'Error', 'Pilih side gang terlebih dahulu sebelum menyimpan!');
-                document.getElementById('gang-side').focus();
-                return;
-            }
-            
-            if (!namaPJ) {
-                showNotification('error', 'Error', 'Pilih nama PJ terlebih dahulu!');
-                document.getElementById('nama-pj').focus();
-                return;
-            }
+            const uangMerah = parseFloat(document.getElementById('uang-merah')?.value) || 0;
 
+            const UANG_MERAH_PER_CARD = 50000;
+            const jumlahKacangIjo = Math.round(uangMerah / UANG_MERAH_PER_CARD);
+            
             if (!namaGeng) {
                 showNotification('error', 'Error', 'Nama geng harus diisi!');
                 document.getElementById('nama-geng').focus();
                 return;
             }
             
-            if (jumlahKacangIjo === 0 && jumlahBaggy === 0) {
-                showNotification('error', 'Error', 'Minimal pilih satu jenis barang!');
-                return;
-            }
             
-            // Hitung harga
-            const hargaKacangIjo = gangSide === 'west' ? HARGA_KACANG_IJO_WEST : HARGA_KACANG_IJO_NORMAL;
-            const totalKacangIjo = hargaKacangIjo * jumlahKacangIjo;
-            const totalBaggy = HARGA_BAGGY * jumlahBaggy;
-            const totalUangDiterima = totalKacangIjo + totalBaggy;
-            
+            // Hitung harga + financial breakdown (per spreadsheet)
+            const jumlahBaggy = parseInt(document.getElementById('jumlah-baggy')?.value) || 0;
+
+            const financials = calculateOrderFinancials({
+                cardCount: jumlahKacangIjo,
+                uangMerah,
+                potonganMerahPct: 10,
+                potonganPutihPct: 15,
+                addCostPerCard: 200,
+                htPct: 0.15,
+                storagePct: 0.10
+            });
+
+            const totalBaggy = (typeof HARGA_BAGGY !== 'undefined') ? HARGA_BAGGY * jumlahBaggy : 0;
+
+            // totalUangDiterima represents the 'Total Uang ke Customer' (hasil - add cost)
+            const totalUangDiterima = financials.toCustomer;
+
             const pemesananData = {
                 id: Date.now().toString(),
                 namaGeng,
                 namaPJ,
-                gangSide: gangSide === 'west' ? 'West Side' : 'Non-West Side',
                 jumlahKacangIjo,
+                uangMerah,
                 jumlahBaggy,
-                hargaKacangIjo,
-                totalKacangIjo,
+                hargaKacangIjo: HARGA_KACANG_IJO_NORMAL,
+                totalKacangIjo: uangMerah,
                 totalBaggy,
                 totalUangDiterima,
                 tanggal: new Date().toISOString(),
                 status: 'Pending'
+            };
+            // Attach financial breakdown for history/detail view
+            pemesananData.financials = {
+                raw: {
+                    cardCount: financials.cardCount,
+                    uangMerah: financials.uangMerah,
+                    totalUangPutih: financials.totalUangPutih,
+                    potonganUangPutih: financials.potonganUangPutih,
+                    hasil: financials.hasil,
+                    addCostTotal: financials.addCostTotal,
+                    toCustomer: financials.toCustomer,
+                    b2fGet: financials.b2fGet,
+                    toHT: financials.toHT,
+                    afterHT: financials.afterHT,
+                    toStorage: financials.toStorage,
+                    salaryAfterHT: financials.salaryAfterHT
+                },
+                formatted: financials.format()
             };
             
             try {
@@ -9735,7 +9808,6 @@ Terima kasih telah berbelanja!
                 // Reset form
                 document.getElementById('pemesanan-form').reset();
                 document.getElementById('total-kacang-ijo').value = '';
-                document.getElementById('total-baggy').value = '';
                 document.getElementById('total-uang-diterima').value = '';
                 document.getElementById('nama-pj').value = '';
                 
@@ -9759,27 +9831,69 @@ Terima kasih telah berbelanja!
                     pemesananHistory.push(doc.data());
                 });
                 
+                pemesananHistoryPage = 1;
                 renderPemesananHistory();
                 
             } catch (error) {
                 console.error('Error loading pemesanan history:', error);
                 // Fallback to localStorage if needed
                 pemesananHistory = JSON.parse(localStorage.getItem('b2f_pemesanan_history')) || [];
+                pemesananHistoryPage = 1;
                 renderPemesananHistory();
             }
         }
-        
+
+        function setPemesananHistoryFilter(filter) {
+            pemesananHistoryFilter = filter;
+            pemesananHistoryPage = 1;
+            document.querySelectorAll('#history-filter-buttons .filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+            renderPemesananHistory();
+        }
+
+        function changePemesananHistoryPage(delta) {
+            pemesananHistoryPage += delta;
+            renderPemesananHistory();
+        }
+
+        function getFilteredPemesananHistory() {
+            if (pemesananHistoryFilter === 'all') {
+                return [...pemesananHistory];
+            }
+            return pemesananHistory.filter(item => {
+                const status = String(item.status || 'Pending');
+                return status.toLowerCase() === String(pemesananHistoryFilter).toLowerCase();
+            });
+        }
+
         function renderPemesananHistory() {
             const tbody = document.getElementById('history-body');
+            const filteredHistory = getFilteredPemesananHistory();
+            const totalItems = filteredHistory.length;
+            const totalPages = Math.max(1, Math.ceil(totalItems / PEMESANAN_HISTORY_PAGE_SIZE));
             
-            if (pemesananHistory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Belum ada pemesanan</td></tr>';
-                updateTotalPenerimaan();
+            if (pemesananHistoryPage > totalPages) {
+                pemesananHistoryPage = totalPages;
+            }
+            
+            const startIndex = (pemesananHistoryPage - 1) * PEMESANAN_HISTORY_PAGE_SIZE;
+            const currentPageItems = filteredHistory.slice(startIndex, startIndex + PEMESANAN_HISTORY_PAGE_SIZE);
+            const fromRow = totalItems === 0 ? 0 : startIndex + 1;
+            const toRow = Math.min(totalItems, startIndex + PEMESANAN_HISTORY_PAGE_SIZE);
+            
+            document.getElementById('history-pagination-info').textContent = `${fromRow}-${toRow} dari ${totalItems}`;
+            document.getElementById('history-prev-btn').disabled = pemesananHistoryPage <= 1;
+            document.getElementById('history-next-btn').disabled = pemesananHistoryPage >= totalPages;
+            
+            if (totalItems === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Tidak ada pemesanan dengan status "${pemesananHistoryFilter === 'all' ? 'Semua' : pemesananHistoryFilter}"</td></tr>`;
+                updateTotalPenerimaan(filteredHistory);
                 return;
             }
             
             let html = '';
-            pemesananHistory.forEach(item => {
+            currentPageItems.forEach(item => {
                 const tanggal = new Date(item.tanggal).toLocaleDateString('id-ID');
                 const statusClass = item.status === 'Delivered' ? 'status-badge completed' : item.status === 'Done' ? 'status-badge info' : item.status === 'Proses' ? 'status-badge warning' : 'status-badge';
                 const statusText = item.status === 'Delivered' ? 'Delivered' : item.status === 'Done' ? 'Done (Belum Terkirim)' : item.status || 'Pending';
@@ -9787,7 +9901,7 @@ Terima kasih telah berbelanja!
                 html += `
                     <tr>
                         <td>${item.namaGeng}</td>
-                        <td>${item.gangSide}</td>
+                        <td>${item.namaPJ ? item.namaPJ : 'unknown'}</td>
                         <td>Rp ${(item.totalUangDiterima || 0).toLocaleString('id-ID')}</td>
                         <td>${tanggal}</td>
                         <td><span class="${statusClass}">${statusText}</span></td>
@@ -9815,7 +9929,7 @@ Terima kasih telah berbelanja!
             });
             
             tbody.innerHTML = html;
-            updateTotalPenerimaan();
+            updateTotalPenerimaan(filteredHistory);
         }
         
         async function updatePemesananStatus(id, newStatus) {
@@ -9871,8 +9985,11 @@ Terima kasih telah berbelanja!
             }
         }
         
-        function updateTotalPenerimaan() {
-            const total = pemesananHistory.reduce((sum, item) => sum + (item.totalUangDiterima || 0), 0);
+        function updateTotalPenerimaan(historyList = pemesananHistory) {
+            const total = historyList.reduce((sum, item) => {
+                const toStorage = item.toStorage ?? item.financials?.raw?.toStorage ?? 0;
+                return sum + toStorage;
+            }, 0);
             document.getElementById('total-penerimaan').textContent = `Rp ${total.toLocaleString('id-ID')}`;
         }
         
@@ -9891,9 +10008,14 @@ Terima kasih telah berbelanja!
                         <div class="modal-body">
                             <div class="detail-summary" style="margin-bottom: 16px; gap: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
                                 <div><strong>Geng:</strong> <span id="detail-nama-geng"></span></div>
-                                <div><strong>PJ:</strong> <span id="detail-nama-pj"></span></div>
-                                <div><strong>Side:</strong> <span id="detail-side"></span></div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <strong>PJ:</strong>
+                                    <input type="text" id="detail-nama-pj-input" placeholder="Edit PJ" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccd6dd;">
+                                </div>
                                 <div><strong>Tanggal:</strong> <span id="detail-tanggal"></span></div>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; gap: 10px;">
+                                <button class="btn btn-primary btn-sm" onclick="saveDetailPJ()">Simpan PJ</button>
                             </div>
                             <div style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
                                 <strong>Status:</strong> <span id="detail-status" style="font-size: 1.1rem; color: var(--primary-blue);"></span>
@@ -9935,43 +10057,39 @@ Terima kasih telah berbelanja!
             ensureDetailModalExists();
             
             const detailNamaGeng = document.getElementById('detail-nama-geng');
-            const detailNamaPJ = document.getElementById('detail-nama-pj');
-            const detailSide = document.getElementById('detail-side');
+            const detailNamaPJInput = document.getElementById('detail-nama-pj-input');
             const detailTanggal = document.getElementById('detail-tanggal');
             const detailStatus = document.getElementById('detail-status');
             const detailItems = document.getElementById('detail-items');
             const detailTotal = document.getElementById('detail-total');
             const detailModal = document.getElementById('detail-pemesanan-modal');
 
-            if (!detailModal || !detailNamaGeng || !detailSide || !detailTanggal || !detailStatus || !detailItems || !detailTotal) {
+            if (!detailModal || !detailNamaGeng || !detailNamaPJInput || !detailTanggal || !detailStatus || !detailItems || !detailTotal) {
                 console.error('❌ Detail modal elements still not found after ensuring');
                 return;
             }
             
             // Fill modal header
             detailNamaGeng.textContent = item.namaGeng;
-            if (detailNamaPJ) {
-                detailNamaPJ.textContent = item.namaPJ || '-';
-            }
+            detailNamaPJInput.value = item.namaPJ || '';
             
             // Fill summary
-            detailSide.textContent = item.gangSide;
             detailTanggal.textContent = new Date(item.tanggal).toLocaleDateString('id-ID');
             detailStatus.textContent = item.status || 'Pending';
             
             // Fill items
             let itemsHtml = '';
-            
+
             if (item.jumlahKacangIjo > 0) {
                 itemsHtml += `
                     <div class="detail-item">
-                        <div class="detail-item-name">Weed</div>
+                        <div class="detail-item-name">Uang Merah (Card)</div>
                         <div class="detail-item-quantity">${item.jumlahKacangIjo} pcs</div>
                         <div class="detail-item-price">Rp ${(item.totalKacangIjo || 0).toLocaleString('id-ID')}</div>
                     </div>
                 `;
             }
-            
+
             if (item.jumlahBaggy > 0) {
                 itemsHtml += `
                     <div class="detail-item">
@@ -9981,14 +10099,91 @@ Terima kasih telah berbelanja!
                     </div>
                 `;
             }
-            
+
+            // Financial breakdown (if available)
+            if (item.financials && item.financials.raw) {
+                const f = item.financials; // contains raw and formatted
+                itemsHtml += `
+                    <div style="padding:12px; margin-top:10px; background:#f8fafc; border-radius:8px;">
+                        <div style="font-weight:600; margin-bottom:8px; color:var(--primary-blue);">Rincian Perhitungan</div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>Uang Merah (Total):</div>
+                            <div>${formatCurrency(f.raw.uangMerah)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>Total Uang Putih (${f.raw.potonganMerahPct || 10}%):</div>
+                            <div>${formatCurrency(f.raw.totalUangPutih)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>Potongan Uang Putih (${f.raw.potonganPutihPct || 15}%):</div>
+                            <div>${formatCurrency(f.raw.potonganUangPutih)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>Hasil (setelah potongan putih):</div>
+                            <div>${formatCurrency(f.raw.hasil)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>Card Cost (total):</div>
+                            <div>${formatCurrency(f.raw.addCostTotal)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-weight:700; margin-top:8px;">
+                            <div>To Customer (Hasil - Add Cost):</div>
+                            <div>${formatCurrency(f.raw.toCustomer)}</div>
+                        </div>
+                        <hr style="margin:10px 0; border:none; border-top:1px dashed #e2e8f0;" />
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>B2F Get (Potongan Uang Putih):</div>
+                            <div>${formatCurrency(f.raw.b2fGet)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>To HT (${(f.raw.toHT && (f.raw.toHT / f.raw.b2fGet * 100).toFixed(2)) || '—'}%):</div>
+                            <div>${formatCurrency(f.raw.toHT)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>After HT:</div>
+                            <div>${formatCurrency(f.raw.afterHT)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div>To Storage (${(f.raw.toStorage && (f.raw.toStorage / f.raw.afterHT * 100).toFixed(2)) || '—'}%):</div>
+                            <div>${formatCurrency(f.raw.toStorage)}</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-weight:600; margin-top:8px;">
+                            <div>Salary After HT:</div>
+                            <div>${formatCurrency(f.raw.salaryAfterHT)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
             detailItems.innerHTML = itemsHtml;
-            
+
             // Fill total
             detailTotal.textContent = `Rp ${(item.totalUangDiterima || 0).toLocaleString('id-ID')}`;
             
             // Show modal
             detailModal.classList.add('active');
+        }
+
+        async function saveDetailPJ() {
+            const id = window.currentPemesananId;
+            if (!id) return;
+
+            const pjInput = document.getElementById('detail-nama-pj-input');
+            if (!pjInput) return;
+
+            const newPJ = pjInput.value.trim();
+            const item = pemesananHistory.find(p => p.id === id);
+            if (!item) return;
+
+            item.namaPJ = newPJ;
+            try {
+                await db.collection('pemesanan_barang').doc(id).update({ namaPJ: newPJ });
+                renderPemesananHistory();
+                addNotification('success', 'Berhasil', 'PJ berhasil diperbarui.');
+            } catch (error) {
+                console.error('Error updating PJ:', error);
+                addNotification('error', 'Error', 'Gagal memperbarui PJ.');
+            }
         }
         
         function updateStatusModal(status) {
