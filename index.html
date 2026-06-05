@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B2F STASH - Dashboard Admin</title>
+    <title>B2F Stash - Dashboard Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -15,19 +15,19 @@
     
     <style>
         :root {
-            --primary-blue: #1a365d;
-            --secondary-blue: #2d3748;
-            --accent-blue: #3182ce;
-            --light-blue: #ebf8ff;
-            --blue-gray: #718096;
-            --text-dark: #2d3748;
-            --text-light: #f7fafc;
-            --success: #38a169;
-            --warning: #d69e2e;
-            --danger: #e53e3e;
-            --info: #4299e1;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --border-radius: 10px;
+            --primary-blue: #2b6ca3; /* soft muted blue */
+            --secondary-blue: #1f597f; /* complementary soft tone */
+            --accent-blue: #bfa44a; /* muted gold accent */
+            --light-blue: #eef6fb; /* very soft bg blue */
+            --blue-gray: #6b7280;
+            --text-dark: #123b4a; /* slightly warmer dark for better contrast */
+            --text-light: #ffffff;
+            --success: #2f855a;
+            --warning: #b7791f;
+            --danger: #c53030;
+            --info: #4aa3e0;
+            --shadow: 0 6px 12px rgba(2,6,23,0.045);
+            --border-radius: 8px;
             --sidebar-width: 250px;
                 --smooth-ease: cubic-bezier(0.2, 0.9, 0.2, 1);
         }
@@ -105,8 +105,8 @@
         }
         
         .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left: 4px solid var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.06);
+            border-left: 2px solid var(--accent-blue);
         }
         
         .nav-link i {
@@ -171,7 +171,7 @@
         }
         
         .notification {
-            background: white;
+            background: var(--light-blue);
             border-radius: var(--border-radius);
             padding: 16px 20px;
             box-shadow: var(--shadow);
@@ -183,7 +183,7 @@
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             pointer-events: auto;
             max-width: 380px;
-            border-left: 5px solid var(--accent-blue);
+            border-left: 2px solid var(--accent-blue);
         }
         
         .notification.show {
@@ -193,22 +193,22 @@
         
         .notification.success {
             border-left-color: var(--success);
-            background: linear-gradient(90deg, #f0fff4, white);
+            background: linear-gradient(90deg, #f0fff4, var(--light-blue));
         }
         
         .notification.error {
             border-left-color: var(--danger);
-            background: linear-gradient(90deg, #fff5f5, white);
+            background: linear-gradient(90deg, #fff5f5, var(--light-blue));
         }
         
         .notification.warning {
             border-left-color: var(--warning);
-            background: linear-gradient(90deg, #fffaf0, white);
+            background: linear-gradient(90deg, #fffaf0, var(--light-blue));
         }
         
         .notification.info {
             border-left-color: var(--info);
-            background: linear-gradient(90deg, #ebf8ff, white);
+            background: linear-gradient(90deg, #ebf8ff, var(--light-blue));
         }
         
         .notification-icon {
@@ -302,21 +302,19 @@
         }
         
         /* Notification counter in navbar */
-        .notification-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--danger);
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            animation: pulse 2s infinite;
+        .notification-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--light-blue);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 350px;
+            max-height: 500px;
+            overflow: hidden;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
         }
         
         @keyframes pulse {
@@ -350,7 +348,7 @@
             position: fixed;
             top: 80px;
             right: 20px;
-            background: white;
+            background: var(--light-blue);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             width: 350px;
@@ -509,7 +507,7 @@
             width: 18px;
             left: 3px;
             bottom: 3px;
-            background-color: white;
+            background-color: var(--light-blue);
             transition: .4s;
             border-radius: 50%;
         }
@@ -536,7 +534,7 @@
             align-items: center;
             margin-bottom: 30px;
             padding: 15px 20px;
-            background-color: white;
+            background-color: var(--light-blue);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
         }
@@ -593,7 +591,7 @@
         }
         
         .stat-card {
-            background-color: white;
+            background-color: var(--light-blue);
             border-radius: var(--border-radius);
             padding: 25px;
             box-shadow: var(--shadow);
@@ -651,7 +649,7 @@
 /* Receipt Modal */
 .receipt-container {
     font-family: 'Courier New', monospace;
-    background: white;
+    background: var(--light-blue);
     padding: 20px;
     border-radius: var(--border-radius);
     border: 1px solid #e2e8f0;
@@ -864,7 +862,7 @@
         }
         
         .product-card {
-            background: white;
+            background: var(--light-blue);
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: var(--shadow);
@@ -995,7 +993,7 @@
 @media print {
     body.dark-mode .receipt-container,
     body.dark-mode .receipt-container * {
-        background-color: white !important;
+        background-color: var(--light-blue) !important;
         color: black !important;
     }
 }
@@ -1096,7 +1094,7 @@
         }
         
         .modal-content {
-            background-color: white;
+            background-color: var(--light-blue);
             border-radius: var(--border-radius);
             width: 90%;
             max-width: 500px;
@@ -1218,6 +1216,106 @@ body.dark-mode .close-modal {
 
 body.dark-mode .close-modal:hover {
     color: #e0e0e0;
+}
+
+/* Detail Modal Styling */
+.detail-modal .modal-content {
+    max-width: 500px;
+}
+
+.detail-summary {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.detail-summary-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-summary-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.detail-summary-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.detail-items {
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.detail-item-quantity {
+    color: #666;
+    font-size: 14px;
+}
+
+.detail-item-price {
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
+.detail-total {
+    background-color: var(--accent-blue);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Dark mode untuk detail modal */
+body.dark-mode .detail-summary {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .detail-summary-label {
+    color: #b0b0b0;
+}
+
+body.dark-mode .detail-summary-value {
+    color: #e0e0e0;
+}
+
+body.dark-mode .detail-item {
+    border-bottom-color: #444;
+}
+
+body.dark-mode .detail-item-name {
+    color: #e0e0e0;
+}
+
+body.dark-mode .detail-item-quantity {
+    color: #b0b0b0;
 }
 
 /* Dark mode untuk form */
@@ -1665,14 +1763,14 @@ body.dark-mode #darkmode-toggle:hover {
 }
 
 /* Filter Dropdown Styles */
-.category-filter {
+    .category-filter {
     width: 200px;
     padding: 12px 15px;
     border-radius: var(--border-radius);
     border: 1px solid #cbd5e0;
     font-family: 'Poppins', sans-serif;
     font-size: 0.95rem;
-    background-color: white;
+    background-color: var(--light-blue);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -1780,7 +1878,7 @@ body.dark-mode .darkmode-btn:hover {
     align-items: center;
     justify-content: center;
     padding: 15px 10px;
-    background: white;
+    background: var(--light-blue);
     border: 2px solid #e2e8f0;
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -1820,7 +1918,7 @@ body.dark-mode .darkmode-btn:hover {
 .delivery-instructions {
     margin-bottom: 15px;
     padding: 10px;
-    background: white;
+    background: var(--light-blue);
     border-radius: var(--border-radius);
     font-size: 0.9rem;
     color: var(--blue-gray);
@@ -1965,13 +2063,19 @@ body.dark-mode .darkmode-btn:hover {
     border: 1px solid #d69e2e;
 }
 
+.status-badge.completed {
+    background-color: #c6f6d5;
+    color: #276749;
+    border: 1px solid #38a169;
+}
+
 /* Update order detail modal */
 .delivered-items-list {
     margin-top: 15px;
     padding: 15px;
     background: #f0fff4;
     border-radius: var(--border-radius);
-    border-left: 4px solid var(--success);
+    border-left: 2px solid var(--success);
 }
 
 .delivered-items-list h5 {
@@ -2056,7 +2160,7 @@ body.dark-mode .darkmode-btn:hover {
             height: 30px;
             border-radius: 50%;
             border: 1px solid #cbd5e0;
-            background: white;
+            background: var(--light-blue);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -2161,7 +2265,7 @@ body.dark-mode .darkmode-btn:hover {
         }
         
         .table-card {
-            background-color: white;
+            background-color: var(--light-blue);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -2572,7 +2676,7 @@ body.dark-mode .darkmode-btn:hover {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     z-index: 999;
     transition: all 0.3s ease;
-    border: 3px solid white;
+        border: 3px solid var(--light-blue);
 }
 
 .floating-cart-btn:hover {
@@ -2603,7 +2707,7 @@ body.dark-mode .darkmode-btn:hover {
     right: 30px;
     width: 350px;
     max-height: 500px;
-    background: white;
+        background: var(--light-blue);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     z-index: 1000;
@@ -2761,12 +2865,12 @@ body.dark-mode .product-card[data-status="preorder"]::before {
     margin-top: 5px;
 }
 
-.floating-quantity-btn {
+    .floating-quantity-btn {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     border: 1px solid #cbd5e0;
-    background: white;
+    background: var(--light-blue);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2805,11 +2909,11 @@ body.dark-mode .product-card[data-status="preorder"]::before {
     margin-top: 8px;
 }
 
-.floating-cart-actions {
+    .floating-cart-actions {
     padding: 15px;
     display: flex;
     gap: 10px;
-    background: white;
+    background: var(--light-blue);
     border-top: 1px solid #e2e8f0;
 }
 
@@ -2909,7 +3013,7 @@ body.dark-mode .product-card[data-status="preorder"]::before {
     padding: 8px 16px;
     border-radius: var(--border-radius);
     border: 1px solid #cbd5e0;
-    background: white;
+    background: var(--light-blue);
     color: var(--text-dark);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -2920,6 +3024,152 @@ body.dark-mode .product-card[data-status="preorder"]::before {
     background-color: var(--accent-blue);
     color: white;
     border-color: var(--accent-blue);
+}
+/* Shipping Item Selection Modal */
+.shipping-item-modal .modal-content {
+    max-width: 800px;
+}
+
+.shipping-items-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.shipping-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.2s ease;
+}
+
+.shipping-item:hover {
+    background-color: #f8fafc;
+}
+
+.shipping-item:last-child {
+    border-bottom: none;
+}
+
+.shipping-item-checkbox {
+    margin-right: 15px;
+}
+
+.shipping-item-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.shipping-item-info {
+    flex: 1;
+}
+
+.shipping-item-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.shipping-item-details {
+    display: flex;
+    gap: 15px;
+    color: var(--blue-gray);
+    font-size: 0.9rem;
+}
+
+.shipping-item-category {
+    background-color: var(--light-blue);
+    color: var(--accent-blue);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.shipping-item-price {
+    color: var(--success);
+    font-weight: 600;
+    min-width: 120px;
+    text-align: right;
+}
+
+.shipping-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+    .shipping-quantity-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e0;
+    background: var(--light-blue);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shipping-quantity-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #cbd5e0;
+    border-radius: var(--border-radius);
+    padding: 5px;
+}
+
+.shipping-summary {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.shipping-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 5px 0;
+}
+
+.shipping-summary-row.total {
+    border-top: 2px solid #e2e8f0;
+    padding-top: 10px;
+    margin-top: 5px;
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+/* Dark mode untuk shipping modal */
+body.dark-mode .shipping-item {
+    border-bottom-color: #333;
+}
+
+body.dark-mode .shipping-item:hover {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .shipping-item-category {
+    background-color: #2d2d2d;
+    color: var(--accent-blue);
+}
+
+body.dark-mode .shipping-quantity-btn {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .shipping-quantity-input {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .shipping-summary {
+    background-color: #1a1a1a;
 }
 
 .filter-btn:hover:not(.active) {
@@ -2958,12 +3208,12 @@ body.dark-mode .product-card[data-status="preorder"]::before {
     gap: 15px;
 }
 
-.logo-image {
+    .logo-image {
     width: 50px;
     height: 50px;
     border-radius: 10px;
     object-fit: contain;
-    background-color: white;
+    background-color: var(--light-blue);
     padding: 5px;
 }
 
@@ -3026,9 +3276,510 @@ body.login-active::before {
     z-index: 9998;
     pointer-events: auto;
 }
+/* Tambahkan di bagian CSS */
+.cs-options {
+    margin-top: 10px;
+}
+
+.cs-option {
+    cursor: pointer;
+    display: block;
+}
+
+.cs-option input[type="radio"] {
+    display: none;
+}
+
+    .cs-option-card {
+    padding: 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--border-radius);
+    text-align: center;
+    transition: all 0.3s ease;
+    background: var(--light-blue);
+}
+
+.cs-option-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.cs-option input[type="radio"]:checked + .cs-option-card {
+    border-color: var(--accent-blue);
+    background-color: var(--light-blue);
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.cs-option-card i {
+    font-size: 2rem;
+    color: var(--accent-blue);
+    margin-bottom: 10px;
+}
+
+.cs-option-card h4 {
+    margin: 0 0 5px 0;
+    color: var(--primary-blue);
+}
+
+.cs-option-card p {
+    margin: 0;
+    color: var(--blue-gray);
+    font-size: 0.9rem;
+}
+
+/* Shipment status badges */
+.shipment-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.shipment-status.unprocessed {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.shipment-status.to-cs {
+    background-color: #bee3f8;
+    color: #2c5282;
+}
+
+.shipment-status.to-ht {
+    background-color: #c6f6d5;
+    color: #276749;
+}
+
+.shipment-status.completed {
+    background-color: #e2e8f0;
+    color: #4a5568;
+}
+
+/* Shipment action buttons */
+.shipment-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Metalscrap indicators */
+.metalscrap-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: #f7fafc;
+    border: 1px solid #cbd5e0;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.metalscrap-badge i {
+    color: #d69e2e;
+}
+
+/* Dark mode styles */
+body.dark-mode .cs-option-card {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .cs-option-card:hover {
+    border-color: var(--accent-blue);
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .cs-option input[type="radio"]:checked + .cs-option-card {
+    background-color: #1a2a3a;
+    border-color: var(--accent-blue);
+}
+
+body.dark-mode .cs-option-card h4 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .cs-option-card p {
+    color: #b0b0b0;
+}
+
+body.dark-mode .metalscrap-badge {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+/* ==================== PEMESANAN BARANG STYLES ==================== */
+
+#pemesanan-barang .form-group {
+    margin-bottom: 20px;
+}
+
+#pemesanan-barang .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+#pemesanan-barang .form-row.compact-row .form-group {
+    flex: 1 1 260px;
+    max-width: 320px;
+}
+
+#pemesanan-barang .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+#pemesanan-barang input[type="text"],
+#pemesanan-barang input[type="number"],
+#pemesanan-barang select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background: var(--light-blue);
+}
+
+#pemesanan-barang input[type="text"]:focus,
+#pemesanan-barang input[type="number"]:focus,
+#pemesanan-barang select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+#pemesanan-barang input[readonly] {
+    background-color: #f8fafc;
+    cursor: not-allowed;
+}
+
+#pemesanan-barang input#total-kacang-ijo,
+#pemesanan-barang input#total-baggy {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+    font-weight: 500;
+}
+
+#pemesanan-barang input#total-uang-diterima {
+    background-color: #e8f5e8;
+    border-color: var(--success);
+    font-weight: 600;
+    color: var(--success);
+}
+
+#pemesanan-barang .btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#pemesanan-barang .btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+    color: white;
+}
+
+#pemesanan-barang .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+}
+
+#pemesanan-barang .btn-success {
+    background: var(--success);
+    color: white;
+}
+
+#pemesanan-barang .btn-success:hover {
+    background: #38a169;
+}
+
+#pemesanan-barang .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* History Table Styles */
+#pemesanan-barang #history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--light-blue);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+#pemesanan-barang #history-table thead {
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+    color: white;
+}
+
+#pemesanan-barang #history-table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+#pemesanan-barang #history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.9rem;
+}
+
+#pemesanan-barang #history-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+#pemesanan-barang #history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status Badge in Table */
+#pemesanan-barang .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+#pemesanan-barang .status-badge.completed {
+    background-color: #c6f6d5;
+    color: #276749;
+    border: 1px solid #38a169;
+}
+
+/* Dark mode untuk pemesanan barang */
+body.dark-mode #pemesanan-barang .form-group label {
+    color: #e0e0e0;
+}
+
+body.dark-mode #pemesanan-barang input[type="text"],
+body.dark-mode #pemesanan-barang input[type="number"],
+body.dark-mode #pemesanan-barang select {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode #pemesanan-barang input[readonly] {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode #pemesanan-barang input#total-kacang-ijo,
+body.dark-mode #pemesanan-barang input#total-baggy {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode #pemesanan-barang input#total-uang-diterima {
+    background-color: #1a2a1a;
+    border-color: var(--success);
+    color: var(--success);
+}
+
+body.dark-mode #pemesanan-barang #history-table {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode #pemesanan-barang #history-table td {
+    border-bottom-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode #pemesanan-barang #history-table tbody tr:hover {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode #pemesanan-barang .status-badge.completed {
+    background-color: #1a3a1a;
+    color: #68d391;
+    border-color: #38a169;
+}
+
+/* Responsive untuk pemesanan barang */
+@media (max-width: 768px) {
+    #pemesanan-barang #history-table {
+        font-size: 0.75rem;
+    }
+    
+    #pemesanan-barang #history-table th,
+    #pemesanan-barang #history-table td {
+        padding: 6px 4px;
+    }
+    
+    #pemesanan-barang .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Sembunyikan kolom yang kurang penting di mobile */
+    #pemesanan-barang #history-table th:nth-child(5),
+    #pemesanan-barang #history-table td:nth-child(5),
+    #pemesanan-barang #history-table th:nth-child(6),
+    #pemesanan-barang #history-table td:nth-child(6) {
+        display: none;
+    }
+}
 
 body.login-active {
     overflow: hidden;
+}
+
+/* Summary Info Styles */
+.summary-info {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.total-summary {
+    background: linear-gradient(135deg, var(--success), #38a169);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px rgba(72, 187, 120, 0.3);
+    font-weight: 600;
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    margin-right: 10px;
+}
+
+.summary-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* Detail Modal Styles */
+.detail-summary {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row.total {
+    border-top: 2px solid var(--success);
+    padding-top: 15px;
+    margin-top: 15px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--success);
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.detail-value {
+    color: var(--text-dark);
+}
+
+.detail-items {
+    margin-bottom: 20px;
+}
+
+    .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--light-blue);
+    border: 1px solid #e2e8f0;
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+}
+
+.detail-item-name {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.detail-item-quantity {
+    color: var(--blue-gray);
+    font-size: 0.9rem;
+}
+
+.detail-item-price {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.detail-total {
+    background: #f0f9f0;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--success);
+}
+
+/* Dark mode untuk detail modal */
+body.dark-mode .detail-summary {
+    background: #2d2d2d;
+}
+
+body.dark-mode .detail-row {
+    border-bottom-color: #444;
+}
+
+body.dark-mode .detail-row.total {
+    border-top-color: var(--success);
+}
+
+body.dark-mode .detail-label,
+body.dark-mode .detail-value {
+    color: #e0e0e0;
+}
+
+body.dark-mode .detail-item {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-mode .detail-item-name {
+    color: #e0e0e0;
+}
+
+body.dark-mode .detail-item-quantity {
+    color: #b0b0b0;
+}
+
+body.dark-mode .detail-total {
+    background: #1a2a1a;
 }
 
 #login-modal {
@@ -3139,8 +3890,8 @@ body.login-active {
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <img src="images/B2F.png" alt="B2F STASH Logo" class="logo-image">
-                <h1>B2F STASH</h1>
+                <img src="images/B2F.png" alt="B2F Stash Logo" class="logo-image">
+                <h1>B2F Stash</h1>
             </div>
         </div>
         
@@ -3175,6 +3926,12 @@ body.login-active {
                     Laporan
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="#pemesanan-barang" class="nav-link" data-section="pemesanan-barang">
+                    <i class="fas fa-shopping-cart"></i>
+                    Data Cuci Uang
+                </a>
+            </li>
         </ul>
         
         <!-- Notification Settings in Sidebar -->
@@ -3200,7 +3957,7 @@ body.login-active {
             <div class="user-info">
                 <div class="user-avatar">A</div>
                 <div>
-                    <h4>Admin B2F STASH</h4>
+                    <h4>Admin B2F Stash</h4>
                     <p>Administrator</p>
                 </div>
             </div>
@@ -3368,7 +4125,7 @@ body.login-active {
                         <i class="fas fa-bars"></i>
                     </button>
                     <h2>Marketplace</h2>
-                    <p>Belanja produk dari B2F STASH</p>
+                    <p>Belanja dari B2F Stash</p>
                 </div>
                 
                 <div class="top-bar-actions">
@@ -3549,151 +4306,433 @@ body.login-active {
             </div>
         </div>
         
-<!-- Ganti bagian Reports Content dengan ini: -->
-<div id="reports" class="content-section">
-    <div class="top-bar">
-        <div class="page-title">
-            <button class="menu-toggle" id="menu-toggle-5">
-                <i class="fas fa-bars"></i>
-            </button>
-            <h2>Laporan & Analitik</h2>
-            <p>Analisis kinerja toko berdasarkan data aktual</p>
-        </div>
-        
-        <div class="top-bar-actions">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="report-search" placeholder="Cari laporan...">
-            </div>
-            
-            <div class="table-actions">
-                <select class="form-control" id="report-period" onchange="loadReports()" style="width: 200px;">
-                    <option value="week">7 Hari Terakhir</option>
-                    <option value="month">30 Hari Terakhir</option>
-                    <option value="custom">Periode Kustom</option>
-                </select>
-            </div>
-        </div>
-    </div>
-        <!-- Reports Content -->
-    <div id="reports-loading" class="loading">
-        <i class="fas fa-spinner"></i>
-    </div>
-    
-    <div id="reports-content" style="display: none;">
-        <!-- Detailed Reports -->
-        <div class="tables-section">
-            <!-- Daily Sales Table -->
-            <div class="table-card">
-                <div class="table-header">
-                    <h3>Laporan Penjualan Harian</h3>
-                    <button class="btn btn-secondary" onclick="exportReport()">
-                        <i class="fas fa-download"></i> Export
+        <!-- Ganti bagian Reports Content dengan ini: -->
+        <div id="reports" class="content-section">
+            <div class="top-bar">
+                <div class="page-title">
+                    <button class="menu-toggle" id="menu-toggle-5">
+                        <i class="fas fa-bars"></i>
                     </button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Pesanan</th>
-                            <th>Penjualan</th>
-                            <th>Pelanggan Baru</th>
-                            <th>Rata-rata Transaksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="daily-sales-table">
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: 30px; color: var(--blue-gray);">
-                                <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                                <p>Belum ada data</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Top Products Report -->
-            <div class="table-card">
-                <div class="table-header">
-                    <h3>Produk Terlaris</h3>
-                    <button class="btn btn-secondary" onclick="refreshReports()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                </div>
-                <div id="top-products-report-loading" class="loading" style="padding: 20px;">
-                    <i class="fas fa-spinner"></i> Memuat produk...
-                </div>
-                <table id="top-products-report-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Produk</th>
-                            <th>Terjual</th>
-                            <th>Pendapatan</th>
-                            <th>Stok Tersisa</th>
-                        </tr>
-                    </thead>
-                    <tbody id="top-products-report-body">
-                        <!-- Products will be loaded here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Warning jika belum ada data -->
-    <div class="warning-message" id="report-warning" style="display: none;">
-        <i class="fas fa-info-circle"></i> 
-        <strong>Info:</strong> Laporan akan menampilkan data berdasarkan pesanan yang telah dibuat.
-        Mulai dengan membuat pesanan melalui Marketplace untuk melihat laporan.
-    </div>  
-            <!-- Reports Content -->
-            <div id="reports-loading" class="loading">
-            </div>
-            <div id="reports-content" style="display: none;">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon income">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Pertumbuhan Penjualan</h3>
-                            <div class="value" id="sales-growth">0%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon customers">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Pelanggan Baru</h3>
-                            <div class="value" id="new-customers">0</div>
-                        </div>
-                    </div>
+                    <h2>Laporan & Analitik</h2>
+                    <p>Analisis kinerja toko berdasarkan data aktual</p>
                 </div>
                 
-                <div class="table-card">
-                    <div class="table-header">
-                        <h3>Laporan Penjualan Harian</h3>
+                <div class="top-bar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="report-search" placeholder="Cari laporan...">
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
+                    
+                    <div class="table-actions">
+                        <select class="form-control" id="report-period" onchange="loadReports()" style="width: 200px;">
+                            <option value="week">7 Hari Terakhir</option>
+                            <option value="month">30 Hari Terakhir</option>
+                            <option value="custom">Periode Kustom</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+                <!-- Reports Content -->
+            <div id="reports-loading" class="loading">
+                <i class="fas fa-spinner"></i></div>
+            
+            <div id="reports-content" style="display: none;">
+                <!-- Detailed Reports -->
+                <div class="tables-section">
+                    <!-- Daily Sales Table -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Laporan Penjualan Harian</h3>
+                            <button class="btn btn-secondary" onclick="exportReport()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Pesanan</th>
+                                    <th>Penjualan</th>
+                                    <th>Pelanggan Baru</th>
+                                    <th>Rata-rata Transaksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="daily-sales-table">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 30px; color: var(--blue-gray);">
+                                        <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                        <p>Belum ada data</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Top Products Report -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Produk Terlaris</h3>
+                            <button class="btn btn-secondary" onclick="refreshReports()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                        <div id="top-products-report-loading" class="loading" style="padding: 20px;">
+                            <i class="fas fa-spinner"></i> Memuat produk...
+                        </div>
+                        <table id="top-products-report-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>Terjual</th>
+                                    <th>Pendapatan</th>
+                                    <th>Stok Tersisa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-products-report-body">
+                                <!-- Products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Warning jika belum ada data -->
+                <div class="warning-message" id="report-warning" style="display: none;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Info:</strong> Laporan akan menampilkan data berdasarkan pesanan yang telah dibuat.
+                    Mulai dengan membuat pesanan melalui Marketplace untuk melihat laporan.
+                </div>  
+                <!-- Reports Content -->
+                <div id="reports-loading" class="loading"></div>
+                <div id="reports-content" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon income">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Pertumbuhan Penjualan</h3>
+                                <div class="value" id="sales-growth">0%</div>
+                            </div>
+                        </div>
+                            
+                        <div class="stat-card">
+                            <div class="stat-icon customers">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Pelanggan Baru</h3>
+                                <div class="value" id="new-customers">0</div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Laporan Penjualan Harian</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
                                 <th>Tanggal</th>
                                 <th>Pesanan</th>
                                 <th>Penjualan</th>
                                 <th>Pelanggan Baru</th>
                                 <th>Rata-rata Transaksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="daily-sales-table">
+                                </tr>
+                            </thead>
+                            <tbody id="daily-sales-table">
                             <!-- Daily sales will be loaded here -->
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Tambahkan setelah section Reports -->
+        <div id="cs-shipment" class="content-section">
+            <div class="top-bar">
+                <div class="page-title">
+                    <button class="menu-toggle" id="menu-toggle-6">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Kirim Pesanan ke CS/HT</h2>
+                    <p>Kelola pengiriman barang ke Crew Supplier dan Home Team</p>
+                </div>
+                <div class="top-bar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="shipment-search" placeholder="Cari pesanan..." onkeyup="searchShipments()">
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateAllShipments()">
+                        <i class="fas fa-calculator"></i> Hitung Semua
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="order-filters" style="margin-bottom: 20px;">
+                <button class="filter-btn active" data-filter="unprocessed" onclick="filterShipments('unprocessed')">
+                    <i class="fas fa-clock"></i> Belum Dikirim
+                </button>
+                <button class="filter-btn" data-filter="to-cs" onclick="filterShipments('to-cs')">
+                    <i class="fas fa-store"></i> Ke CS
+                </button>
+                <button class="filter-btn" data-filter="to-ht" onclick="filterShipments('to-ht')">
+                    <i class="fas fa-home"></i> Ke HT
+                </button>
+                <button class="filter-btn" data-filter="completed" onclick="filterShipments('completed')">
+                    <i class="fas fa-check"></i> Selesai
+                </button>
+            </div>
+            
+            <!-- CS Selection Panel -->
+            <div class="table-card" style="margin-bottom: 20px;">
+                <div class="table-header">
+                    <h3>Pilih Crew Supplier</h3>
+                </div>
+                <div class="form-group" style="padding: 20px;">
+                    <div class="cs-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <label class="cs-option">
+                            <input type="radio" name="cs-provider" value="BOA" checked>
+                            <div class="cs-option-card">
+                                <i class="fas fa-ship"></i>
+                                <h4>BOA</h4>
+                                <p>Tanpa biaya tambahan</p>
+                            </div>
+                        </label>
+                        
+                        <label class="cs-option">
+                            <input type="radio" name="cs-provider" value="AllStar">
+                            <div class="cs-option-card">
+                                <i class="fas fa-star"></i>
+                                <h4>AllStar</h4>
+                                <p>+30% + 400 MS</p>
+                            </div>
+                        </label>
+                        
+                        <label class="cs-option">
+                            <input type="radio" name="cs-provider" value="GHO">
+                            <div class="cs-option-card">
+                                <i class="fas fa-ghost"></i>
+                                <h4>GHO</h4>
+                                <p>200/400 MS</p>
+                            </div>
+                        </label>
+                        
+                        <label class="cs-option">
+                            <input type="radio" name="cs-provider" value="4Bloods">
+                            <div class="cs-option-card">
+                                <i class="fas fa-tint"></i>
+                                <h4>4Bloods</h4>
+                                <p>Tanpa biaya tambahan</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Pesanan yang Siap Dikirim</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-success" onclick="processSelectedShipments()">
+                            <i class="fas fa-paper-plane"></i> Proses Terpilih
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportShipmentReport()">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div id="shipment-loading" class="loading">
+                    <i class="fas fa-spinner"></i> Memuat pesanan...
+                </div>
+                <table id="shipment-table" style="display: none; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;">
+                                <input type="checkbox" id="select-all-shipments">
+                            </th>
+                            <th>ID Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Total Pesanan</th>
+                            <th>Metalscrap CS</th>
+                            <th>Metalscrap HT</th>
+                            <th>Total Akhir</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipment-body">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Summary Panel -->
+            <div class="table-card" id="shipment-summary" style="display: none; margin-top: 20px;">
+                <div class="table-header">
+                    <h3>Ringkasan Pengiriman</h3>
+                </div>
+                <div style="padding: 20px;">
+                    <div class="stats-grid" style="margin-bottom: 20px;">
+                        <div class="stat-card">
+                            <div class="stat-icon orders">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Pesanan</h3>
+                                <div class="value" id="total-shipment-orders">0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon income">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Nilai</h3>
+                                <div class="value" id="total-shipment-value">Rp 0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon products">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Metalscrap CS</h3>
+                                <div class="value" id="total-cs-metalscrap">0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon customers">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Metalscrap HT</h3>
+                                <div class="value" id="total-ht-metalscrap">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="shipment-actions">
+                        <button class="btn btn-primary" onclick="copyShipmentSummary()">
+                            <i class="fas fa-copy"></i> Copy Ringkasan
+                        </button>
+                        <button class="btn btn-success" onclick="markAllAsShipped()">
+                            <i class="fas fa-check-double"></i> Tandai Semua Terkirim
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pemesanan Barang Section -->
+        <div id="pemesanan-barang" class="content-section">
+            <div class="top-bar">
+                <div class="page-title">
+                    <button class="menu-toggle" id="menu-toggle-7">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Data Cuci Uang</h2>
+                    <p>Kelola data cuci uang untuk geng</p>
+                </div>
+            </div>
+            
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Form Pemesanan Barang</h3>
+                </div>
+                <div style="padding: 20px;">
+                    <form id="pemesanan-form">
+                        <div class="form-row compact-row">
+                            <div class="form-group short-field">
+                                <label for="nama-geng">Nama Geng *</label>
+                                <input type="text" id="nama-geng" required placeholder="Masukkan nama geng">
+                            </div>
+                            
+                            <div class="form-group short-field">
+                                <label for="gang-side">Gang Side *</label>
+                                <select id="gang-side" required>
+                                    <option value="">Pilih Side</option>
+                                    <option value="west">West Side</option>
+                                    <option value="non-west">Non-West Side</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group short-field">
+                                <label for="nama-pj">Nama PJ *</label>
+                                <select id="nama-pj" required>
+                                    <option value="">Pilih PJ</option>
+                                    <option value="PJ 1">PJ 1</option>
+                                    <option value="PJ 2">PJ 2</option>
+                                    <option value="PJ 3">PJ 3</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Pilihan Barang dengan Input Jumlah -->
+                        <div class="form-group">
+                            <label>Weed</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="jumlah-kacang-ijo" min="0" value="0" placeholder="Jumlah" style="flex: 1;">
+                                <span style="color: var(--text-dark); font-weight: 500;">@ Rp 700/650</span>
+                                <input type="text" id="total-kacang-ijo" readonly placeholder="Total" style="flex: 1; background-color: #f8fafc;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Baggy</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="jumlah-baggy" min="0" value="0" placeholder="Jumlah" style="flex: 1;">
+                                <span style="color: var(--text-dark); font-weight: 500;">@ Rp 50</span>
+                                <input type="text" id="total-baggy" readonly placeholder="Total" style="flex: 1; background-color: #f8fafc;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="total-uang-diterima">Total Uang Diterima</label>
+                            <input type="text" id="total-uang-diterima" readonly placeholder="Total keseluruhan" style="background-color: #e8f5e8; border-color: var(--success); font-weight: 600; color: var(--success);">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Simpan Pemesanan
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="table-card" style="margin-top: 20px;">
+                <div class="table-header">
+                    <h3>History Pemesanan</h3>
+                    <div class="summary-info">
+                        <div class="total-summary">
+                            <span class="summary-label">Total Penerimaan:</span>
+                            <span class="summary-value" id="total-penerimaan">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+                <table id="history-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Nama Geng</th>
+                            <th>Side</th>
+                            <th>Total Diterima</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Detail</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- History akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    
     
     <!-- Modals -->
     <!-- Cart Modal -->
@@ -3714,89 +4753,113 @@ body.login-active {
             </div>
         </div>
     </div>
-    
-<!-- Add/Edit Product Modal -->
-<div class="modal" id="product-form-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="product-form-title">Tambah Produk Baru</h3>
-            <button class="close-modal" id="close-product-form">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="product-form">
-                <input type="hidden" id="product-id">
-                
-                <div class="form-group">
-                    <label for="product-name">Nama Produk *</label>
-                    <input type="text" id="product-name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product-category">Kategori *</label>
-                    <select id="product-category" class="form-control" required>
-                        <option value="">Pilih Kategori</option>
-                        <option value="Class 1">Class 1</option>
-                        <option value="Class 2">Class 2</option>
-                        <option value="Class 3">Class 3</option>
-                        <option value="Ammo">Ammo</option>
-                        <option value="Attachment">Attachment</option>
-                        <option value="Vest">Vest</option>
-                        <option value="Heist Stuff">Heist Stuff</option>
-                        <option value="Narcotics">Narcotics</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Status Produk *</label>
-                    <div style="display: flex; gap: 20px; margin-top: 10px;">
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="radio" name="product-status" value="ready" id="status-ready" checked>
-                            <span>Ready Stock</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="radio" name="product-status" value="preorder" id="status-preorder">
-                            <span>Pre-Order</span>
-                        </label>
+    <!-- Product Form Modal -->
+    <div class="modal" id="product-form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="product-form-title">Tambah Produk Baru</h3>
+                <button class="close-modal" id="close-product-form">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+                    
+                    <div class="form-group">
+                        <label for="product-name">Nama Produk *</label>
+                        <input type="text" id="product-name" class="form-control" required>
                     </div>
-                </div>
-                
-                <div class="form-group" id="stock-input-group">
-                    <label for="product-stock">Stok *</label>
-                    <input type="number" id="product-stock" class="form-control" min="0" value="0" required>
-                    <small style="color: var(--blue-gray); font-size: 0.85rem;">Masukkan jumlah stok tersedia</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product-price">Harga (Rp) *</label>
-                    <input type="number" id="product-price" class="form-control" min="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product-description">Deskripsi</label>
-                    <textarea id="product-description" class="form-control" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product-image-url">URL Gambar Produk *</label>
-                    <input type="url" id="product-image-url" class="form-control" 
-                           placeholder="https://example.com/image.jpg" 
-                           required oninput="updateImagePreview(this.value)">
-                    <div style="margin-top:8px;">
-                        <img id="product-image-preview" src="" alt="Preview Gambar" style="width:100%; max-height:200px; object-fit:contain; border-radius:8px; background:#f3f4f6; display:none;">
+                    
+                    <div class="form-group">
+                        <label for="product-category">Kategori *</label>
+                        <select id="product-category" class="form-control" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Ammo">Ammo</option>
+                            <option value="Attachment">Attachment</option>
+                            <option value="Vest">Vest</option>
+                            <option value="Heist Stuff">Heist Stuff</option>
+                            <option value="Narcotics">Narcotics</option>
+                        </select>
                     </div>
-                    <small>Gunakan URL gambar dari Unsplash, Pexels, atau penyedia gambar lainnya.</small>
-                </div>
-                
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="submit-product-btn">
-                        <i class="fas fa-save"></i> Simpan Produk
-                    </button>
-                </div>
-            </form>
+                    
+                    <div class="form-group">
+                        <label>Status Produk *</label>
+                        <div style="display: flex; gap: 20px; margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="radio" name="product-status" value="ready" id="status-ready" checked>
+                                <span>Ready Stock</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="radio" name="product-status" value="preorder" id="status-preorder">
+                                <span>Pre-Order</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="stock-input-group">
+                        <label for="product-stock">Stok *</label>
+                        <input type="number" id="product-stock" class="form-control" min="0" value="0" required>
+                        <small style="color: var(--blue-gray); font-size: 0.85rem;">Masukkan jumlah stok tersedia</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-price">Harga (Rp) *</label>
+                        <input type="number" id="product-price" class="form-control" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-description">Deskripsi</label>
+                        <textarea id="product-description" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-image-url">URL Gambar Produk *</label>
+                        <input type="url" id="product-image-url" class="form-control" 
+                            placeholder="https://example.com/image.jpg" 
+                            required oninput="updateImagePreview(this.value)">
+                        <div style="margin-top:8px;">
+                            <img id="product-image-preview" src="" alt="Preview Gambar" style="width:100%; max-height:200px; object-fit:contain; border-radius:8px; background:#f3f4f6; display:none;">
+                        </div>
+                        <small>Gunakan URL gambar dari Unsplash, Pexels, atau penyedia gambar lainnya.</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="submit-product-btn">
+                            <i class="fas fa-save"></i> Simpan Produk
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
+    <div class="modal detail-modal" id="detail-pemesanan-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Pemesanan</h3>
+                <button class="close-modal" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-summary" style="margin-bottom: 16px; gap: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div><strong>Geng:</strong> <span id="detail-nama-geng"></span></div>
+                    <div><strong>PJ:</strong> <span id="detail-nama-pj"></span></div>
+                    <div><strong>Side:</strong> <span id="detail-side"></span></div>
+                    <div><strong>Tanggal:</strong> <span id="detail-tanggal"></span></div>
+                </div>
+                <div style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
+                    <strong>Status:</strong> <span id="detail-status" style="font-size: 1.1rem; color: var(--primary-blue);"></span>
+                    <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" onclick="updateStatusModal('Pending')" style="background: #e8f5e9; border-color: #4caf50; color: #2e7d32;">Pending</button>
+                        <button class="btn btn-secondary btn-sm" onclick="updateStatusModal('Proses')" style="background: #fff3cd; border-color: #ff9800; color: #e65100;">Proses</button>
+                        <button class="btn btn-secondary btn-sm" onclick="updateStatusModal('Done')" style="background: #e3f2fd; border-color: #2196f3; color: #0d47a1;">Done</button>
+                    </div>
+                </div>
+                <div class="detail-items" id="detail-items"></div>
+                <div class="detail-total" id="detail-total" style="margin-top: 16px; font-weight: 700; font-size: 1.05rem;"></div>
+            </div>
+        </div>
+    </div>
     <div class="modal" id="checkout-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -3815,8 +4878,9 @@ body.login-active {
                         <label for="payment-recipient">Pembayaran Diterima Oleh *</label>
                         <select id="payment-recipient" class="form-control" required>
                             <option value="">Pilih penerima pembayaran</option>
-                            <option value="Romee">Romee</option>
-                            <option value="-nama-">-nama-</option>
+                            <option value="Giw">Giw</option>
+                            <option value="Alzo">Alzo</option>
+                            <option value="Dipsy">Dipsy</option>
                         </select>
                     </div>
                     
@@ -3860,248 +4924,247 @@ body.login-active {
         </div>
     </div>
     <!-- Checkout Confirmation Modal -->
-<div class="modal" id="checkout-confirm-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Konfirmasi Checkout</h3>
-            <button class="close-modal" id="close-checkout-confirm">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="confirmation-details" id="confirmation-details">
-                <!-- Details will be filled by JavaScript -->
+    <div class="modal" id="checkout-confirm-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Konfirmasi Checkout</h3>
+                <button class="close-modal" id="close-checkout-confirm">&times;</button>
             </div>
-            <div class="confirmation-actions">
-                <button class="btn btn-secondary" id="cancel-checkout">
-                    <i class="fas fa-times"></i> Batal
-                </button>
-                <button class="btn btn-success" id="confirm-checkout">
-                    <i class="fas fa-check-circle"></i> Konfirmasi & Proses
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Receipt Modal -->
-<div class="modal" id="receipt-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Struk Pembayaran</h3>
-            <button class="close-modal" id="close-receipt">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="receipt-container" id="receipt-container">
-                <!-- Receipt content will be filled by JavaScript -->
-            </div>
-            <div class="receipt-actions">
-                <button class="btn btn-secondary" onclick="printReceipt()">
-                    <i class="fas fa-print"></i> Cetak Struk
-                </button>
-                <button class="btn btn-primary" id="close-receipt-btn">
-                    <i class="fas fa-check"></i> Tutup
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Floating Cart Button -->
-<div class="floating-cart-btn" id="floating-cart-btn">
-    <i class="fas fa-shopping-cart"></i>
-    <span class="floating-cart-count" id="floating-cart-count">0</span>
-</div>
-
-<!-- Floating Cart Panel -->
-<div class="floating-cart-panel" id="floating-cart-panel">
-    <div class="floating-cart-header">
-        <h4><i class="fas fa-shopping-cart"></i> Keranjang</h4>
-        <button class="close-floating-cart" id="close-floating-cart">&times;</button>
-    </div>
-    <div class="floating-cart-items" id="floating-cart-items">
-        <!-- Items will be loaded here -->
-    </div>
-    <div class="floating-cart-summary" id="floating-cart-summary">
-        <!-- Summary will be loaded here -->
-    </div>
-    <div class="floating-cart-actions">
-        <button class="btn btn-primary" onclick="viewFullCart()">
-            <i class="fas fa-expand"></i> Buka Lengkap
-        </button>
-        <button class="btn btn-success" onclick="checkoutFromFloating()">
-            <i class="fas fa-credit-card"></i> Checkout
-        </button>
-    </div>
-</div>
-<!-- Payment Status Modal -->
-<div class="modal" id="payment-status-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Status Pembayaran & Pengiriman</h3>
-            <button class="close-modal" id="close-payment-status">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="payment-status-section">
-                <h4>Status Pembayaran</h4>
-                <div class="payment-options">
-                    <label class="payment-option">
-                        <input type="radio" name="paymentStatus" value="lunas" id="payment-lunas">
-                        <span class="payment-option-label">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Lunas</span>
-                        </span>
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="paymentStatus" value="belum" id="payment-belum">
-                        <span class="payment-option-label">
-                            <i class="fas fa-clock"></i>
-                            <span>Belum Bayar</span>
-                        </span>
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="paymentStatus" value="sebagian" id="payment-sebagian">
-                        <span class="payment-option-label">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>DP/SeBagian</span>
-                        </span>
-                    </label>
+            <div class="modal-body">
+                <div class="confirmation-details" id="confirmation-details">
+                    <!-- Details will be filled by JavaScript -->
+                </div>
+                <div class="confirmation-actions">
+                    <button class="btn btn-secondary" id="cancel-checkout">
+                        <i class="fas fa-times"></i> Batal
+                    </button>
+                    <button class="btn btn-success" id="confirm-checkout">
+                        <i class="fas fa-check-circle"></i> Konfirmasi & Proses
+                    </button>
                 </div>
             </div>
-            
-            <div class="delivery-section">
-                <h4>Status Pengiriman Barang</h4>
-                <div class="delivery-instructions">
-                    <i class="fas fa-info-circle"></i> Centang barang yang sudah diberikan ke pelanggan:
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receipt-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Struk Pembayaran</h3>
+                <button class="close-modal" id="close-receipt">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="receipt-container" id="receipt-container">
+                    <!-- Receipt content will be filled by JavaScript -->
                 </div>
-                <div class="delivery-items" id="delivery-items">
-                    <!-- Items will be loaded here -->
+                <div class="receipt-actions">
+                    <button class="btn btn-secondary" onclick="printReceipt()">
+                        <i class="fas fa-print"></i> Cetak Struk
+                    </button>
+                    <button class="btn btn-primary" id="close-receipt-btn">
+                        <i class="fas fa-check"></i> Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Floating Cart Button -->
+    <div class="floating-cart-btn" id="floating-cart-btn">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="floating-cart-count" id="floating-cart-count">0</span>
+    </div>
+
+    <!-- Floating Cart Panel -->
+    <div class="floating-cart-panel" id="floating-cart-panel">
+        <div class="floating-cart-header">
+            <h4><i class="fas fa-shopping-cart"></i> Keranjang</h4>
+            <button class="close-floating-cart" id="close-floating-cart">&times;</button>
+        </div>
+        <div class="floating-cart-items" id="floating-cart-items">
+            <!-- Items will be loaded here -->
+        </div>
+        <div class="floating-cart-summary" id="floating-cart-summary">
+            <!-- Summary will be loaded here -->
+        </div>
+        <div class="floating-cart-actions">
+            <button class="btn btn-primary" onclick="viewFullCart()">
+                <i class="fas fa-expand"></i> Buka Lengkap
+            </button>
+            <button class="btn btn-success" onclick="checkoutFromFloating()">
+                <i class="fas fa-credit-card"></i> Checkout
+            </button>
+        </div>
+    </div>
+    <div class="modal" id="payment-status-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Status Pembayaran & Pengiriman</h3>
+                <button class="close-modal" id="close-payment-status">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-status-section">
+                    <h4>Status Pembayaran</h4>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentStatus" value="lunas" id="payment-lunas">
+                            <span class="payment-option-label">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Lunas</span>
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentStatus" value="belum" id="payment-belum">
+                            <span class="payment-option-label">
+                                <i class="fas fa-clock"></i>
+                                <span>Belum Bayar</span>
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentStatus" value="sebagian" id="payment-sebagian">
+                            <span class="payment-option-label">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>DP/SeBagian</span>
+                            </span>
+                        </label>
+                    </div>
                 </div>
                 
-                <div class="amount-paid-section" id="amount-paid-section" style="display: none;">
-                    <label for="amount-paid">Jumlah yang Sudah Dibayar (Rp):</label>
-                    <input type="number" id="amount-paid" class="form-control" min="0" 
-                        placeholder="Masukkan jumlah yang sudah dibayar" 
-                        onchange="calculateRemainingAmount()">
-                </div>
-            </div>
-            
-            <div class="payment-actions">
-                <button class="btn btn-secondary" id="cancel-payment-status">
-                    <i class="fas fa-times"></i> Batal
-                </button>
-                <button class="btn btn-success" id="save-payment-status">
-                    <i class="fas fa-save"></i> Simpan Status
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Tambahkan sebelum tag </body> -->
-<div class="modal" id="copy-summary-modal">
-    <div class="modal-content copy-summary-modal">
-        <div class="modal-header">
-            <h3>Ringkasan Pesanan Diproses</h3>
-            <button class="close-modal" id="close-copy-summary">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="summary-content" id="summary-content">
-                <!-- Ringkasan akan muncul di sini -->
-            </div>
-            <div class="summary-actions">
-                <div>
-                    <button class="btn btn-secondary" onclick="clearSummary()">
-                        <i class="fas fa-times"></i> Bersihkan
-                    </button>
-                </div>
-                <div>
-                    <button class="btn btn-primary" onclick="copySummaryToClipboard()">
-                        <i class="fas fa-copy"></i> Copy ke Clipboard
-                    </button>
-                </div>
-            </div>
-            <div class="copy-success" id="copy-success">
-                <i class="fas fa-check-circle"></i> Ringkasan berhasil disalin ke clipboard!
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal" id="login-modal" style="display: flex; z-index: 10000;">
-    <div class="modal-content" style="max-width: 400px;">
-        <div class="modal-header" style="text-align: center; border-bottom: 2px solid var(--accent-blue);">
-            <h3 style="margin: 0;">
-                <i class="fas fa-store"></i> B2F STASH
-            </h3>
-        </div>
-        <div class="modal-body" style="text-align: center;">
-            <!-- Role Selection -->
-            <div id="role-selection" style="margin-bottom: 30px;">
-                <h4 style="color: var(--primary-blue); margin-bottom: 20px;">
-                    Pilih Akses Anda
-                </h4>
-                
-                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                    <!-- Pembeli Button -->
-                    <button class="role-btn" id="buyer-btn" onclick="selectRole('buyer')" 
-                            style="flex: 1; padding: 20px; border: 2px solid #cbd5e0; 
-                                   background: white; border-radius: var(--border-radius); 
-                                   cursor: pointer; transition: all 0.3s ease;">
-                        <i class="fas fa-shopping-bag" style="font-size: 2rem; color: var(--accent-blue); display: block; margin-bottom: 10px;"></i>
-                        <strong>Pembeli</strong>
-                        <p style="font-size: 0.85rem; color: var(--blue-gray); margin-top: 5px;">
-                            Berbelanja produk
-                        </p>
-                    </button>
+                <div class="delivery-section">
+                    <h4>Status Pengiriman Barang</h4>
+                    <div class="delivery-instructions">
+                        <i class="fas fa-info-circle"></i> Centang barang yang sudah diberikan ke pelanggan:
+                    </div>
+                    <div class="delivery-items" id="delivery-items">
+                        <!-- Items will be loaded here -->
+                    </div>
                     
-                    <!-- Admin Button -->
-                    <button class="role-btn" id="admin-btn" onclick="selectRole('admin')" 
-                            style="flex: 1; padding: 20px; border: 2px solid #cbd5e0; 
-                                   background: white; border-radius: var(--border-radius); 
-                                   cursor: pointer; transition: all 0.3s ease;">
-                        <i class="fas fa-user-shield" style="font-size: 2rem; color: var(--success); display: block; margin-bottom: 10px;"></i>
-                        <strong>Admin</strong>
-                        <p style="font-size: 0.85rem; color: var(--blue-gray); margin-top: 5px;">
-                            Kelola Brangkas
-                        </p>
-                    </button>
+                    <div class="amount-paid-section" id="amount-paid-section" style="display: none;">
+                        <label for="amount-paid">Jumlah yang Sudah Dibayar (Rp):</label>
+                        <input type="number" id="amount-paid" class="form-control" min="0" 
+                            placeholder="Masukkan jumlah yang sudah dibayar" 
+                            onchange="calculateRemainingAmount()">
+                    </div>
                 </div>
                 
-                <p style="color: var(--blue-gray); font-size: 0.9rem;">
-                    <i class="fas fa-info-circle"></i> Pilih akses untuk melanjutkan
-                </p>
+                <div class="payment-actions">
+                    <button class="btn btn-secondary" id="cancel-payment-status">
+                        <i class="fas fa-times"></i> Batal
+                    </button>
+                    <button class="btn btn-success" id="save-payment-status">
+                        <i class="fas fa-save"></i> Simpan Status
+                    </button>
+                </div>
             </div>
-            
-            <!-- Login Form -->
-            <div id="login-form" style="display: none;">
-                <div style="margin-bottom: 20px; text-align: left;">
-                    <p style="color: var(--blue-gray); font-size: 0.9rem; margin-bottom: 10px;">
-                        <i class="fas fa-lock"></i> Masukkan kode akses untuk <strong id="role-name"></strong>
+        </div>
+    </div>
+    <!-- Tambahkan sebelum tag </body> -->
+    <div class="modal" id="copy-summary-modal">
+        <div class="modal-content copy-summary-modal">
+            <div class="modal-header">
+                <h3>Ringkasan Pesanan Diproses</h3>
+                <button class="close-modal" id="close-copy-summary">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="summary-content" id="summary-content">
+                    <!-- Ringkasan akan muncul di sini -->
+                </div>
+                <div class="summary-actions">
+                    <div>
+                        <button class="btn btn-secondary" onclick="clearSummary()">
+                            <i class="fas fa-times"></i> Bersihkan
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="copySummaryToClipboard()">
+                            <i class="fas fa-copy"></i> Copy ke Clipboard
+                        </button>
+                    </div>
+                </div>
+                <div class="copy-success" id="copy-success">
+                    <i class="fas fa-check-circle"></i> Ringkasan berhasil disalin ke clipboard!
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="login-modal" style="display: flex; z-index: 10000;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header" style="text-align: center; border-bottom: 2px solid var(--accent-blue);">
+                <h3 style="margin: 0;">
+                    <i class="fas fa-store"></i> B2F Stash
+                </h3>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <!-- Role Selection -->
+                <div id="role-selection" style="margin-bottom: 30px;">
+                    <h4 style="color: var(--primary-blue); margin-bottom: 20px;">
+                        Pilih Akses Anda
+                    </h4>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <!-- Pembeli Button -->
+                        <button class="role-btn" id="buyer-btn" onclick="selectRole('buyer')" 
+                                style="flex: 1; padding: 20px; border: 2px solid #cbd5e0; 
+                                    background: var(--light-blue); border-radius: var(--border-radius); 
+                                    cursor: pointer; transition: all 0.3s ease;">
+                            <i class="fas fa-shopping-bag" style="font-size: 2rem; color: var(--accent-blue); display: block; margin-bottom: 10px;"></i>
+                            <strong>Pembeli</strong>
+                            <p style="font-size: 0.85rem; color: var(--blue-gray); margin-top: 5px;">
+                                Berbelanja produk
+                            </p>
+                        </button>
+                        
+                        <!-- Admin Button -->
+                        <button class="role-btn" id="admin-btn" onclick="selectRole('admin')" 
+                                style="flex: 1; padding: 20px; border: 2px solid #cbd5e0; 
+                                    background: var(--light-blue); border-radius: var(--border-radius); 
+                                    cursor: pointer; transition: all 0.3s ease;">
+                            <i class="fas fa-user-shield" style="font-size: 2rem; color: var(--success); display: block; margin-bottom: 10px;"></i>
+                            <strong>Admin</strong>
+                            <p style="font-size: 0.85rem; color: var(--blue-gray); margin-top: 5px;">
+                                Kelola Brangkas
+                            </p>
+                        </button>
+                    </div>
+                    
+                    <p style="color: var(--blue-gray); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Pilih akses untuk melanjutkan
                     </p>
                 </div>
                 
-                <div style="margin-bottom: 20px;">
-                    <input type="password" id="access-code" class="form-control" 
-                           placeholder="Masukkan kode akses" 
-                           style="font-size: 1rem; letter-spacing: 2px; text-align: center;"
-                           onkeypress="if(event.key === 'Enter') verifyAccess()">
-                </div>
-                
-                <div id="error-message" class="error-message" style="display: none; margin-bottom: 15px;">
-                    <i class="fas fa-exclamation-circle"></i> 
-                    <span id="error-text"></span>
-                </div>
-                
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-secondary" onclick="backToRoleSelection()" 
-                            style="flex: 1;">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </button>
-                    <button class="btn btn-primary" onclick="verifyAccess()" 
-                            style="flex: 1;" id="verify-btn">
-                        <i class="fas fa-check"></i> Verifikasi
-                    </button>
+                <!-- Login Form -->
+                <div id="login-form" style="display: none;">
+                    <div style="margin-bottom: 20px; text-align: left;">
+                        <p style="color: var(--blue-gray); font-size: 0.9rem; margin-bottom: 10px;">
+                            <i class="fas fa-lock"></i> Masukkan kode akses untuk <strong id="role-name"></strong>
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <input type="password" id="access-code" class="form-control" 
+                            placeholder="Masukkan kode akses" 
+                            style="font-size: 1rem; letter-spacing: 2px; text-align: center;"
+                            onkeypress="if(event.key === 'Enter') verifyAccess()">
+                    </div>
+                    
+                    <div id="error-message" class="error-message" style="display: none; margin-bottom: 15px;">
+                        <i class="fas fa-exclamation-circle"></i> 
+                        <span id="error-text"></span>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="backToRoleSelection()" 
+                                style="flex: 1;">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </button>
+                        <button class="btn btn-primary" onclick="verifyAccess()" 
+                                style="flex: 1;" id="verify-btn">
+                            <i class="fas fa-check"></i> Verifikasi
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 <div class="modal" id="logout-popup-modal">
     <div class="modal-content" style="max-width:420px;">
         <div class="modal-header">
@@ -4134,19 +5197,66 @@ body.login-active {
             </div>
         </div>
     </div>
+    <!-- Tambahkan di bagian modals, setelah receipt-modal -->
+<div class="modal" id="shipping-item-modal">
+    <div class="modal-content shipping-item-modal">
+        <div class="modal-header">
+            <h3>Pilih Barang untuk Dikirim ke CS</h3>
+            <button class="close-modal" onclick="closeShippingItemModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                    <div class="search-box" style="flex: 1;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="shipping-item-search" placeholder="Cari barang..." 
+                               onkeyup="searchShippingItems()">
+                    </div>
+                    <button class="btn btn-secondary" onclick="selectAllShippingItems()">
+                        <i class="fas fa-check-square"></i> Pilih Semua
+                    </button>
+                    <button class="btn btn-secondary" onclick="deselectAllShippingItems()">
+                        <i class="fas fa-square"></i> Batal Semua
+                    </button>
+                </div>
+                
+                <!-- Filter kategori -->
+                <div class="order-filters" style="margin-bottom: 15px;">
+                    <button class="filter-btn active" data-filter="all" onclick="filterShippingItems('all')">
+                        Semua
+                    </button>
+                    <button class="filter-btn" data-filter="Class 1" onclick="filterShippingItems('Class 1')">
+                        Class 1
+                    </button>
+                    <button class="filter-btn" data-filter="Class 2" onclick="filterShippingItems('Class 2')">
+                        Class 2
+                    </button>
+                    <button class="filter-btn" data-filter="Class 3" onclick="filterShippingItems('Class 3')">
+                        Class 3
+                    </button>
+                    <button class="filter-btn" data-filter="Ammo" onclick="filterShippingItems('Ammo')">
+                        Ammo
+                    </button>
+                    <button class="filter-btn" data-filter="Attachment" onclick="filterShippingItems('Attachment')">
+                        Attachment
+                    </button>
+                </div>
+            </div>
+            
+
 
     <!-- Firebase Configuration -->
     <script>
         // Firebase configuration
-        const firebaseConfig = {
-        apiKey: "AIzaSyBaBx9H92Sb7Wjfq0xuUU9nehUerDwGL7Q",
-        authDomain: "b2fstash.firebaseapp.com",
-        projectId: "b2fstash",
-        storageBucket: "b2fstash.firebasestorage.app",
-        messagingSenderId: "37865246968",
-        appId: "1:37865246968:web:2c66c4ada710135d162b0d",
-        measurementId: "G-XLYZNVM5PB"
-        };
+const firebaseConfig = {
+  apiKey: "AIzaSyBaBx9H92Sb7Wjfq0xuUU9nehUerDwGL7Q",
+  authDomain: "b2fstash.firebaseapp.com",
+  projectId: "b2fstash",
+  storageBucket: "b2fstash.firebasestorage.app",
+  messagingSenderId: "37865246968",
+  appId: "1:37865246968:web:2c66c4ada710135d162b0d",
+  measurementId: "G-XLYZNVM5PB"
+};
         
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -4168,6 +5278,15 @@ body.login-active {
         let currentOrderDataForPayment = null;
         let currentOrderFilter = 'all';
         let allOrdersData = [];
+        
+        // Pemesanan Barang
+        let pemesananHistory = [];
+        const HARGA_KACANG_IJO_NORMAL = 700;
+        const HARGA_KACANG_IJO_WEST = 650;
+        const HARGA_PLASTIK_NORMAL = 700; // TODO: Sesuaikan harga plastik jika berbeda
+        const HARGA_PLASTIK_WEST = 650;   // TODO: Sesuaikan harga plastik jika berbeda
+        const HARGA_BAGGY = 50;
+        // Harga plastik belum ditentukan, bisa ditambahkan nanti
         
         // Notification system
         let notifications = JSON.parse(localStorage.getItem('b2f_notifications')) || [];
@@ -4213,7 +5332,7 @@ body.login-active {
         
         // Initialize the app
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log("🚀 B2F STASH Admin Dashboard dimulai...");
+            console.log("🚀 B2F Stash Admin Dashboard dimulai...");
 
                 // ✅ CEK SESSION DULU SEBELUM APAPUN
             checkUserSession();
@@ -4251,6 +5370,7 @@ body.login-active {
             
             // Load initial data
             loadDashboardStats();
+            initializePemesananBarang();
             
             // Initialize notification system
             initializeNotificationSystem();
@@ -4267,7 +5387,7 @@ body.login-active {
             
             // Simulate welcome notification
             setTimeout(() => {
-                showNotification('success', 'Selamat Datang!', 'Dashboard B2F STASH siap digunakan.');
+                showNotification('success', 'Selamat Datang!', 'Dashboard B2F Stash siap digunakan.');
             }, 1000);
         });
         
@@ -4539,16 +5659,38 @@ function initializeFloatingCart() {
     document.getElementById('close-floating-cart').addEventListener('click', closeFloatingCart);
     
     // Close floating cart when clicking outside
-    document.addEventListener('click', (e) => {
-        const floatingCartBtn = document.getElementById('floating-cart-btn');
-        const floatingCartPanel = document.getElementById('floating-cart-panel');
-        
-        if (floatingCartPanel.classList.contains('show') && 
-            !floatingCartPanel.contains(e.target) && 
-            !floatingCartBtn.contains(e.target)) {
-            closeFloatingCart();
-        }
-    });
+// GANTI event listener ini dengan yang lebih spesifik:
+document.addEventListener('click', (e) => {
+    const floatingCartBtn = document.getElementById('floating-cart-btn');
+    const floatingCartPanel = document.getElementById('floating-cart-panel');
+    
+    if (!floatingCartPanel || !floatingCartPanel.classList.contains('show')) {
+        return; // Panel tidak terbuka, tidak perlu cek
+    }
+    
+    // Cek apakah klik adalah pada:
+    // 1. Tombol cart floating (boleh tutup/untuk toggle)
+    // 2. Di luar panel cart
+    // 3. BUKAN pada elemen dalam cart (tombol hapus, +/- dll)
+    
+    const target = e.target;
+    const isInsideCart = floatingCartPanel.contains(target);
+    const isCartButton = floatingCartBtn.contains(target);
+    const isCartAction = target.closest('.btn-secondary') || 
+                         target.closest('.quantity-btn') ||
+                         target.closest('.quantity-input') ||
+                         target.closest('.cart-item-quantity') ||
+                         target.closest('.cart-item-info');
+    
+    // Hanya tutup jika:
+    // - Panel sedang terbuka DAN
+    // - Klik di luar panel DAN
+    // - Bukan di tombol cart DAN
+    // - Bukan aksi dalam cart (meski di luar, tapi mungkin dropdown dll)
+    if (!isInsideCart && !isCartButton && !isCartAction) {
+        closeFloatingCart();
+    }
+});
     
     // Update floating cart count
     updateFloatingCartCount();
@@ -4643,7 +5785,7 @@ itemsHtml += `
             <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
         </div>
         <div class="floating-summary-row">
-            <span>Pajak (0%)</span>
+            <span>Pajak (5% dari CS)</span>
             <span>Rp ${tax.toLocaleString('id-ID')}</span>
         </div>
         <div class="floating-summary-row">
@@ -4771,11 +5913,11 @@ function checkoutFromFloating() {
                 bell.classList.add('has-notifications');
                 
                 // Update page title with notification count
-                document.title = `(${unreadCount}) B2F STASH - Dashboard Admin`;
+                document.title = `(${unreadCount}) B2F Stash - Dashboard Admin`;
             } else {
                 badge.style.display = 'none';
                 bell.classList.remove('has-notifications');
-                document.title = 'B2F STASH - Dashboard Admin';
+                document.title = 'B2F Stash - Dashboard Admin';
             }
             
             // Update counter in localStorage
@@ -5360,7 +6502,7 @@ document.addEventListener('DOMContentLoaded', function() {
         performLogout();
     });
 });
-        
+
         // ==================== ORIGINAL APP FUNCTIONS ====================
         
         // Set up event listeners
@@ -5969,9 +7111,9 @@ summaryText += `📋 VERSI SINGKAT (untuk WhatsApp/Chat):\n\n`;
             </div>
         </div>
         
-        <div style="background: #fffaf0; padding: 15px; border-radius: var(--border-radius); border-left: 4px solid var(--warning);">
+        <div style="background: #fffaf0; padding: 15px; border-radius: var(--border-radius); border-left: 2px solid var(--warning);">
             <h5><i class="fas fa-comment-dots"></i> Versi Singkat untuk Chat:</h5>
-            <pre style="background: white; padding: 10px; border-radius: 5px; margin-top: 10px;">
+            <pre style="background: var(--light-blue); padding: 10px; border-radius: 5px; margin-top: 10px;">
 ${sortedItems.map(item => `${item.name} - ${item.quantity}pcs`).join('\n')}
 
 Total: Rp ${totalAmount.toLocaleString('id-ID')}
@@ -7306,7 +8448,7 @@ async function viewOrderDetail(orderId) {
                             
                             <div style="background: #f7fafc; padding: 15px; border-radius: var(--border-radius);">
                                 <p><strong>Subtotal:</strong> Rp ${(order.subtotal || 0).toLocaleString('id-ID')}</p>
-                                <p><strong>Pajak (0%):</strong> Rp ${(order.tax || 0).toLocaleString('id-ID')}</p>
+                                <p><strong>Pajak (5% dari CS):</strong> Rp ${(order.tax || 0).toLocaleString('id-ID')}</p>
                                 <p><strong>Pengiriman:</strong> Rp ${(order.shipping || 0).toLocaleString('id-ID')}</p>
                                 <p style="font-size: 1.2rem; font-weight: bold; color: var(--primary-blue);">
                                     <strong>Total:</strong> Rp ${(order.total || 0).toLocaleString('id-ID')}
@@ -7845,97 +8987,96 @@ async function addToCart(productId) {
             console.log(`🛒 Cart updated: ${totalItems} items`);
         }
         
-        // Update cart display
-        function updateCartDisplay() {
-            console.log("🔄 Updating cart display...");
-            
-            const cartItems = document.getElementById('cart-items');
-            const cartSummary = document.getElementById('cart-summary');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = `
-                    <div class="empty-cart">
-                        <i class="fas fa-shopping-cart"></i>
-                        <h3>Keranjang Kosong</h3>
-                        <p>Tambahkan produk ke keranjang Anda</p>
+function updateCartDisplay() {
+    console.log("🔄 Updating cart display...");
+    
+    const cartItems = document.getElementById('cart-items');
+    const cartSummary = document.getElementById('cart-summary');
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Keranjang Kosong</h3>
+                <p>Tambahkan produk ke keranjang Anda</p>
+            </div>
+        `;
+        
+        cartSummary.innerHTML = '';
+        return;
+    }
+    
+    // Render cart items
+    let itemsHtml = '';
+    let subtotal = 0;
+    
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        
+        itemsHtml += `
+            <div class="cart-item">
+                <div class="cart-item-image">
+                    <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400'}" 
+                        alt="${item.name}" 
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';">
+                    ${item.status === 'preorder' ? 
+                        '<div style="position: absolute; top: 5px; left: 5px; background: var(--warning); color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.7rem;">PRE-ORDER</div>' : 
+                        ''}
+                </div>
+                <div class="cart-item-info">
+                    <div class="cart-item-title">${item.name}</div>
+                    <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                    ${item.status === 'preorder' ? 
+                        '<div style="color: var(--warning); font-size: 0.85rem; margin-top: 3px;"><i class="fas fa-clock"></i> Pre-Order</div>' : 
+                        ''}
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', -1)">-</button>
+                        <input type="number" class="quantity-input" value="${item.quantity}" min="1" 
+                            onchange="updateCartQuantity('${item.id}', 0, this.value)">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', 1)">+</button>
+                        <button class="btn btn-secondary" onclick="removeFromCart('${item.id}')" 
+                                style="margin-left: auto; padding: 5px 10px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
-                `;
-                
-                cartSummary.innerHTML = '';
-                return;
-            }
-            
-            // Render cart items
-            let itemsHtml = '';
-            let subtotal = 0;
-            
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                
-                itemsHtml += `
-                    <div class="cart-item">
-                        <div class="cart-item-image">
-                            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400'}" 
-                                alt="${item.name}" 
-                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';">
-                            ${item.status === 'preorder' ? 
-                                '<div style="position: absolute; top: 5px; left: 5px; background: var(--warning); color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.7rem;">PRE-ORDER</div>' : 
-                                ''}
-                        </div>
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${item.name}</div>
-                            <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
-                            ${item.status === 'preorder' ? 
-                                '<div style="color: var(--warning); font-size: 0.85rem; margin-top: 3px;"><i class="fas fa-clock"></i> Pre-Order</div>' : 
-                                ''}
-                            <div class="cart-item-quantity">
-                                <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', -1)">-</button>
-                                <input type="number" class="quantity-input" value="${item.quantity}" min="1" 
-                                    onchange="updateCartQuantity('${item.id}', 0, this.value)">
-                                <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', 1)">+</button>
-                                <button class="btn btn-secondary" onclick="removeFromCart('${item.id}')" 
-                                        style="margin-left: auto; padding: 5px 10px;">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            cartItems.innerHTML = itemsHtml;
-            
-            // Calculate totals
-            const tax = subtotal * 0; // 11% tax
-            const shipping = 0;
-            const total = subtotal + tax + shipping;
-            
-            // Render summary
-            cartSummary.innerHTML = `
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
                 </div>
-                <div class="summary-row">
-                    <span>Pajak (0%)</span>
-                    <span>Rp ${tax.toLocaleString('id-ID')}</span>
-                </div>
-                <div class="summary-row">
-                    <span>Pengiriman</span>
-                    <span>Rp ${shipping.toLocaleString('id-ID')}</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span>Rp ${total.toLocaleString('id-ID')}</span>
-                </div>
-                <button class="checkout-btn" onclick="checkout()">
-                    <i class="fas fa-credit-card"></i> Checkout Sekarang
-                </button>
-            `;
-            
-            console.log("✅ Cart display updated");
-        }
+            </div>
+        `;
+    });
+    
+    cartItems.innerHTML = itemsHtml;
+    
+    // Calculate totals
+    const tax = subtotal * 0; //pajak 20%
+    const shipping = 0;
+    const total = subtotal + tax + shipping;
+    
+    // Render summary
+    cartSummary.innerHTML = `
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
+        </div>
+        <div class="summary-row">
+            <span>Pajak (5% dari CS)</span>
+            <span>Rp ${tax.toLocaleString('id-ID')}</span>
+        </div>
+        <div class="summary-row">
+            <span>Pengiriman</span>
+            <span>Rp ${shipping.toLocaleString('id-ID')}</span>
+        </div>
+        <div class="summary-row total">
+            <span>Total</span>
+            <span>Rp ${total.toLocaleString('id-ID')}</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()">
+            <i class="fas fa-credit-card"></i> Checkout Sekarang
+        </button>
+    `;
+    
+    console.log("✅ Cart display updated");
+}
 
         // Event listener untuk dropdown penerima pembayaran
         document.getElementById('payment-recipient').addEventListener('change', function() {
@@ -8015,6 +9156,13 @@ async function updateCartQuantity(productId, change, newValue = null) {
         // Update displays
         updateCartCount();
         updateCartDisplay();
+
+        
+
+        const floatingPanel = document.getElementById('floating-cart-panel');
+        if (floatingPanel && floatingPanel.classList.contains('show')) {
+            updateFloatingCartDisplay();
+        }
         
         console.log("✅ Cart quantity updated successfully");
         
@@ -8024,8 +9172,12 @@ async function updateCartQuantity(productId, change, newValue = null) {
     }
 }
         
-        // Remove item from cart
-        function removeFromCart(productId) {
+        // Update fungsi removeFromCart:
+        function removeFromCart(productId, event) {  // Tambahkan parameter event
+            if (event) {
+                event.stopPropagation();  // Hentikan propagasi event
+            }
+            
             console.log(`🗑️ Removing from cart: ${productId}`);
             
             cart = cart.filter(item => item.id !== productId);
@@ -8037,6 +9189,12 @@ async function updateCartQuantity(productId, change, newValue = null) {
             // Update displays
             updateCartCount();
             updateCartDisplay();
+            
+            // Update floating cart juga jika terbuka
+            const floatingPanel = document.getElementById('floating-cart-panel');
+            if (floatingPanel && floatingPanel.classList.contains('show')) {
+                updateFloatingCartDisplay();
+            }
             
             addNotification('info', 'Keranjang', 'Item telah dihapus dari keranjang');
             console.log("✅ Item removed from cart");
@@ -8101,7 +9259,7 @@ async function updateCartQuantity(productId, change, newValue = null) {
                     <span>Rp ${currentOrderSummary.subtotal.toLocaleString('id-ID')}</span>
                 </div>
                 <div class="summary-row">
-                    <span>Pajak (0%)</span>
+                    <span>Pajak (5% dari CS)</span>
                     <span>Rp ${currentOrderSummary.tax.toLocaleString('id-ID')}</span>
                 </div>
                 <div class="summary-row">
@@ -8180,7 +9338,7 @@ async function updateCartQuantity(productId, change, newValue = null) {
                     <span class="confirmation-value">Rp ${currentOrderSummary.subtotal.toLocaleString('id-ID')}</span>
                 </div>
                 <div class="confirmation-row">
-                    <span class="confirmation-label">Pajak (0%):</span>
+                    <span class="confirmation-label">Pajak (5%):</span>
                     <span class="confirmation-value">Rp ${currentOrderSummary.tax.toLocaleString('id-ID')}</span>
                 </div>
                 <div class="confirmation-row">
@@ -8417,7 +9575,7 @@ DETAIL PESANAN:\n`;
     receiptContent += `
 --------------------------------
 Subtotal: Rp ${orderData.subtotal.toLocaleString('id-ID')}
-Pajak (0%): Rp ${orderData.tax.toLocaleString('id-ID')}
+Pajak (5% dari CS): Rp ${orderData.tax.toLocaleString('id-ID')}
 Pengiriman: Rp ${orderData.shipping.toLocaleString('id-ID')}
 --------------------------------
 
@@ -8451,7 +9609,403 @@ Terima kasih telah berbelanja!
                 }
             }, 30000); // Update every 30 seconds
         
-        console.log("🎉 B2F STASH Admin Dashboard initialized successfully!");
+        // ==================== PEMESANAN BARANG FUNCTIONS ====================
+        
+        function initializePemesananBarang() {
+            console.log("📦 Initializing pemesanan barang...");
+            
+            // Set up event listeners
+            setupPemesananEventListeners();
+            
+            // Load history
+            loadPemesananHistory();
+        }
+        
+        function setupPemesananEventListeners() {
+            const form = document.getElementById('pemesanan-form');
+            const gangSide = document.getElementById('gang-side');
+            const jumlahKacangIjo = document.getElementById('jumlah-kacang-ijo');
+            const jumlahBaggy = document.getElementById('jumlah-baggy');
+            
+            if (form) {
+                form.addEventListener('submit', handlePemesananSubmit);
+            }
+            
+            if (gangSide) {
+                gangSide.addEventListener('change', calculateTotalHarga);
+            }
+            
+            if (jumlahKacangIjo) {
+                jumlahKacangIjo.addEventListener('input', calculateTotalHarga);
+            }
+            
+            if (jumlahBaggy) {
+                jumlahBaggy.addEventListener('input', calculateTotalHarga);
+            }
+        }
+        
+        function calculateTotalHarga() {
+            const gangSide = document.getElementById('gang-side').value;
+            const jumlahKacangIjo = parseInt(document.getElementById('jumlah-kacang-ijo').value) || 0;
+            const jumlahBaggy = parseInt(document.getElementById('jumlah-baggy').value) || 0;
+
+            if (!gangSide) {
+                document.getElementById('total-kacang-ijo').value = '';
+                document.getElementById('total-baggy').value = '';
+                document.getElementById('total-uang-diterima').value = '';
+                return;
+            }
+            
+            // Hitung harga kacang ijo berdasarkan side
+            const hargaKacangIjo = gangSide === 'west' ? HARGA_KACANG_IJO_WEST : HARGA_KACANG_IJO_NORMAL;
+            const totalKacangIjo = hargaKacangIjo * jumlahKacangIjo;
+            
+            // Hitung harga baggy (tetap)
+            const totalBaggy = HARGA_BAGGY * jumlahBaggy;
+            
+            // Total keseluruhan
+            const totalUangDiterima = totalKacangIjo + totalBaggy;
+            
+            // Update display
+            document.getElementById('total-kacang-ijo').value = `Rp ${totalKacangIjo.toLocaleString('id-ID')}`;
+            document.getElementById('total-baggy').value = `Rp ${totalBaggy.toLocaleString('id-ID')}`;
+            document.getElementById('total-uang-diterima').value = `Rp ${totalUangDiterima.toLocaleString('id-ID')}`;
+        }
+        
+        async function handlePemesananSubmit(e) {
+            e.preventDefault();
+            
+            const namaGeng = document.getElementById('nama-geng').value.trim();
+            const gangSide = document.getElementById('gang-side').value;
+            const namaPJ = document.getElementById('nama-pj').value;
+            const jumlahKacangIjo = parseInt(document.getElementById('jumlah-kacang-ijo').value) || 0;
+            const jumlahBaggy = parseInt(document.getElementById('jumlah-baggy').value) || 0;
+            
+            if (!gangSide) {
+                showNotification('error', 'Error', 'Pilih side gang terlebih dahulu sebelum menyimpan!');
+                document.getElementById('gang-side').focus();
+                return;
+            }
+            
+            if (!namaPJ) {
+                showNotification('error', 'Error', 'Pilih nama PJ terlebih dahulu!');
+                document.getElementById('nama-pj').focus();
+                return;
+            }
+
+            if (!namaGeng) {
+                showNotification('error', 'Error', 'Nama geng harus diisi!');
+                document.getElementById('nama-geng').focus();
+                return;
+            }
+            
+            if (jumlahKacangIjo === 0 && jumlahBaggy === 0) {
+                showNotification('error', 'Error', 'Minimal pilih satu jenis barang!');
+                return;
+            }
+            
+            // Hitung harga
+            const hargaKacangIjo = gangSide === 'west' ? HARGA_KACANG_IJO_WEST : HARGA_KACANG_IJO_NORMAL;
+            const totalKacangIjo = hargaKacangIjo * jumlahKacangIjo;
+            const totalBaggy = HARGA_BAGGY * jumlahBaggy;
+            const totalUangDiterima = totalKacangIjo + totalBaggy;
+            
+            const pemesananData = {
+                id: Date.now().toString(),
+                namaGeng,
+                namaPJ,
+                gangSide: gangSide === 'west' ? 'West Side' : 'Non-West Side',
+                jumlahKacangIjo,
+                jumlahBaggy,
+                hargaKacangIjo,
+                totalKacangIjo,
+                totalBaggy,
+                totalUangDiterima,
+                tanggal: new Date().toISOString(),
+                status: 'Pending'
+            };
+            
+            try {
+                // Save to Firestore
+                await db.collection('pemesanan_barang').doc(pemesananData.id).set(pemesananData);
+                
+                // Add to local array
+                pemesananHistory.unshift(pemesananData);
+                
+                // Reset form
+                document.getElementById('pemesanan-form').reset();
+                document.getElementById('total-kacang-ijo').value = '';
+                document.getElementById('total-baggy').value = '';
+                document.getElementById('total-uang-diterima').value = '';
+                document.getElementById('nama-pj').value = '';
+                
+                // Reload history
+                loadPemesananHistory();
+                
+                showNotification('success', 'Berhasil', 'Pemesanan berhasil disimpan!');
+                
+            } catch (error) {
+                console.error('Error saving pemesanan:', error);
+                showNotification('error', 'Error', 'Gagal menyimpan pemesanan!');
+            }
+        }
+        
+        async function loadPemesananHistory() {
+            try {
+                const snapshot = await db.collection('pemesanan_barang').orderBy('tanggal', 'desc').get();
+                pemesananHistory = [];
+                
+                snapshot.forEach(doc => {
+                    pemesananHistory.push(doc.data());
+                });
+                
+                renderPemesananHistory();
+                
+            } catch (error) {
+                console.error('Error loading pemesanan history:', error);
+                // Fallback to localStorage if needed
+                pemesananHistory = JSON.parse(localStorage.getItem('b2f_pemesanan_history')) || [];
+                renderPemesananHistory();
+            }
+        }
+        
+        function renderPemesananHistory() {
+            const tbody = document.getElementById('history-body');
+            
+            if (pemesananHistory.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Belum ada pemesanan</td></tr>';
+                updateTotalPenerimaan();
+                return;
+            }
+            
+            let html = '';
+            pemesananHistory.forEach(item => {
+                const tanggal = new Date(item.tanggal).toLocaleDateString('id-ID');
+                const statusClass = item.status === 'Delivered' ? 'status-badge completed' : item.status === 'Done' ? 'status-badge info' : item.status === 'Proses' ? 'status-badge warning' : 'status-badge';
+                const statusText = item.status === 'Delivered' ? 'Delivered' : item.status === 'Done' ? 'Done (Belum Terkirim)' : item.status || 'Pending';
+                
+                html += `
+                    <tr>
+                        <td>${item.namaGeng}</td>
+                        <td>${item.gangSide}</td>
+                        <td>Rp ${(item.totalUangDiterima || 0).toLocaleString('id-ID')}</td>
+                        <td>${tanggal}</td>
+                        <td><span class="${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="showDetailModal('${item.id}')">
+                                <i class="fas fa-eye"></i> Detail
+                            </button>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                ${item.status === 'Done' ? 
+                                    `<button class="btn btn-success btn-sm" onclick="updatePemesananStatus('${item.id}', 'Delivered')">
+                                        <i class="fas fa-check"></i>
+                                    </button>` : item.status === 'Delivered' ?
+                                    '<span class="text-success"><i class="fas fa-check-circle"></i></span>' :
+                                    ''
+                                }
+                                <button class="btn btn-secondary btn-sm" style="background:#e53e3e; border-color:#e53e3e;" onclick="deletePemesanan('${item.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+            updateTotalPenerimaan();
+        }
+        
+        async function updatePemesananStatus(id, newStatus) {
+            try {
+                await db.collection('pemesanan_barang').doc(id).update({
+                    status: newStatus
+                });
+                
+                // Update local array
+                const item = pemesananHistory.find(p => p.id === id);
+                if (item) {
+                    item.status = newStatus;
+                }
+                
+                renderPemesananHistory();
+                showNotification('success', 'Berhasil', `Status diubah menjadi ${newStatus}!`);
+                
+                // Close modal jika terbuka
+                const modal = document.getElementById('detail-pemesanan-modal');
+                if (modal && modal.classList.contains('active')) {
+                    closeDetailModal();
+                }
+                
+            } catch (error) {
+                console.error('Error updating pemesanan status:', error);
+                showNotification('error', 'Error', 'Gagal mengupdate status!');
+            }
+        }
+        
+        async function deletePemesanan(id) {
+            try {
+                await db.collection('pemesanan_barang').doc(id).delete();
+                
+                pemesananHistory = pemesananHistory.filter(item => item.id !== id);
+                savePemesananHistoryLocal();
+                renderPemesananHistory();
+                showNotification('success', 'Berhasil', 'Pemesanan berhasil dihapus!');
+            } catch (error) {
+                console.error('Error deleting pemesanan:', error);
+                // Jika Firestore gagal, tetap hapus di local array untuk UI
+                pemesananHistory = pemesananHistory.filter(item => item.id !== id);
+                savePemesananHistoryLocal();
+                renderPemesananHistory();
+                showNotification('warning', 'Dihapus Offline', 'Pesanan dihapus dari tampilan. Sinkronisasi ke Firebase akan dicoba lagi.');
+            }
+        }
+        
+        function savePemesananHistoryLocal() {
+            try {
+                localStorage.setItem('b2f_pemesanan_history', JSON.stringify(pemesananHistory));
+            } catch (error) {
+                console.warn('Gagal menyimpan history lokal:', error);
+            }
+        }
+        
+        function updateTotalPenerimaan() {
+            const total = pemesananHistory.reduce((sum, item) => sum + (item.totalUangDiterima || 0), 0);
+            document.getElementById('total-penerimaan').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+        
+        function ensureDetailModalExists() {
+            let modal = document.getElementById('detail-pemesanan-modal');
+            if (modal) return modal;
+            
+            // Jika modal belum ada, buat secara dinamis
+            const modalHTML = `
+                <div class="modal detail-modal" id="detail-pemesanan-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Detail Pemesanan</h3>
+                            <button class="close-modal" onclick="closeDetailModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="detail-summary" style="margin-bottom: 16px; gap: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                                <div><strong>Geng:</strong> <span id="detail-nama-geng"></span></div>
+                                <div><strong>PJ:</strong> <span id="detail-nama-pj"></span></div>
+                                <div><strong>Side:</strong> <span id="detail-side"></span></div>
+                                <div><strong>Tanggal:</strong> <span id="detail-tanggal"></span></div>
+                            </div>
+                            <div style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
+                                <strong>Status:</strong> <span id="detail-status" style="font-size: 1.1rem; color: var(--primary-blue);"></span>
+                                <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button class="btn btn-secondary btn-sm" onclick="updateStatusModal('Pending')" style="background: #e8f5e9; border-color: #4caf50; color: #2e7d32;">
+                                        Pending
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="updateStatusModal('Proses')" style="background: #fff3cd; border-color: #ff9800; color: #e65100;">
+                                        Proses
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="updateStatusModal('Done')" style="background: #e3f2fd; border-color: #2196f3; color: #0d47a1;">
+                                        Done
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="detail-items" id="detail-items"></div>
+                            <div class="detail-total" id="detail-total" style="margin-top: 16px; font-weight: 700; font-size: 1.05rem;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = modalHTML;
+            document.body.appendChild(wrapper.firstElementChild);
+            
+            console.log("✅ Detail modal created dynamically");
+            return document.getElementById('detail-pemesanan-modal');
+        }
+        
+        function showDetailModal(id) {
+            const item = pemesananHistory.find(p => p.id === id);
+            if (!item) return;
+            
+            // Simpan ID untuk update status
+            window.currentPemesananId = id;
+            
+            // Pastikan modal ada
+            ensureDetailModalExists();
+            
+            const detailNamaGeng = document.getElementById('detail-nama-geng');
+            const detailNamaPJ = document.getElementById('detail-nama-pj');
+            const detailSide = document.getElementById('detail-side');
+            const detailTanggal = document.getElementById('detail-tanggal');
+            const detailStatus = document.getElementById('detail-status');
+            const detailItems = document.getElementById('detail-items');
+            const detailTotal = document.getElementById('detail-total');
+            const detailModal = document.getElementById('detail-pemesanan-modal');
+
+            if (!detailModal || !detailNamaGeng || !detailSide || !detailTanggal || !detailStatus || !detailItems || !detailTotal) {
+                console.error('❌ Detail modal elements still not found after ensuring');
+                return;
+            }
+            
+            // Fill modal header
+            detailNamaGeng.textContent = item.namaGeng;
+            if (detailNamaPJ) {
+                detailNamaPJ.textContent = item.namaPJ || '-';
+            }
+            
+            // Fill summary
+            detailSide.textContent = item.gangSide;
+            detailTanggal.textContent = new Date(item.tanggal).toLocaleDateString('id-ID');
+            detailStatus.textContent = item.status || 'Pending';
+            
+            // Fill items
+            let itemsHtml = '';
+            
+            if (item.jumlahKacangIjo > 0) {
+                itemsHtml += `
+                    <div class="detail-item">
+                        <div class="detail-item-name">Weed</div>
+                        <div class="detail-item-quantity">${item.jumlahKacangIjo} pcs</div>
+                        <div class="detail-item-price">Rp ${(item.totalKacangIjo || 0).toLocaleString('id-ID')}</div>
+                    </div>
+                `;
+            }
+            
+            if (item.jumlahBaggy > 0) {
+                itemsHtml += `
+                    <div class="detail-item">
+                        <div class="detail-item-name">Baggy</div>
+                        <div class="detail-item-quantity">${item.jumlahBaggy} pcs</div>
+                        <div class="detail-item-price">Rp ${(item.totalBaggy || 0).toLocaleString('id-ID')}</div>
+                    </div>
+                `;
+            }
+            
+            detailItems.innerHTML = itemsHtml;
+            
+            // Fill total
+            detailTotal.textContent = `Rp ${(item.totalUangDiterima || 0).toLocaleString('id-ID')}`;
+            
+            // Show modal
+            detailModal.classList.add('active');
+        }
+        
+        function updateStatusModal(status) {
+            const id = window.currentPemesananId;
+            if (!id) return;
+            updatePemesananStatus(id, status);
+        }
+        
+        function closeDetailModal() {
+            const detailModal = document.getElementById('detail-pemesanan-modal');
+            if (detailModal) {
+                detailModal.classList.remove('active');
+            }
+            window.currentPemesananId = null;
+        }
+        
+        console.log("🎉 B2F Stash - Admin Dashboard initialized successfully!");
     </script>
 </body>
 </html>
