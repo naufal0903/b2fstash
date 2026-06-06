@@ -6226,7 +6226,7 @@ async function verifyAccess() {
         
         if (currentSelectedRole === 'buyer') {
             // Kode pembeli: dsgjaya
-            if (accessCode === 'dsgjaya') {
+            if (accessCode === 'lonjong') {
                 isValid = true;
                 userRole = 'buyer';
             }
@@ -6793,15 +6793,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("📝 Product form modal closed");
             });
             
-            // Close modal when clicking outside
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('active');
-                        console.log("❌ Modal closed by clicking outside");
-                    }
-                });
-            });
             
             // Product form submission
             document.getElementById('product-form').addEventListener('submit', function(e) {
