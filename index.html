@@ -4663,7 +4663,7 @@ body.dark-mode .detail-total {
                         <div class="form-group">
                             <label for="total-uang-diterima">Total Uang Ke Customer</label>
                             <input type="text" id="total-uang-diterima" readonly placeholder="Total keseluruhan" style="background-color: #e8f5e8; border-color: var(--success); font-weight: 600; color: var(--success);">
-                            <small id="total-penjelasan" style="display:block; margin-top:6px; color:var(--blue-gray); font-size:0.85rem;">Note: Total yang kita balikin ke customer. Detail total bisa dilihat pada History Pemesanan.</small>
+                            <small id="total-penjelasan" style="display:block; margin-top:6px; color:var(--blue-gray); font-size:0.85rem;">Note: Detail total bisa dilihat pada History Pemesanan.</small>
                         </div>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Simpan Pemesanan
@@ -4692,7 +4692,7 @@ body.dark-mode .detail-total {
                         <tr>
                             <th>Nama Geng</th>
                             <th>PJ</th>
-                            <th>Total Diterima</th>
+                            <th>Total Dikirim</th>
                             <th>Tanggal</th>
                             <th>Status</th>
                             <th>Detail</th>
@@ -8280,6 +8280,27 @@ function updateImagePreview(url) {
             }
         }
 
+function updateSalaryPerPerson() {
+    const count =
+        parseInt(document.getElementById('assign-person-count')?.value) || 1;
+
+    const salaryAfterHT =
+        window.currentSalaryAfterHT || 0;
+
+    const perPerson = salaryAfterHT / count;
+
+    const box = document.getElementById('salary-per-person-box');
+
+    if (box) {
+        box.innerHTML = `
+            Salary After HT: Rp ${salaryAfterHT.toLocaleString('id-ID')}
+            <br>
+            Salary Per Orang (${count} Orang):
+            Rp ${Math.round(perPerson).toLocaleString('id-ID')}
+        `;
+    }
+}
+
         // Fungsi untuk toggle input stok
 function toggleStockInput(status) {
     const stockInputGroup = document.getElementById('stock-input-group');
@@ -9802,6 +9823,18 @@ Terima kasih telah berbelanja!
                 // Save to Firestore
                 await db.collection('pemesanan_barang').doc(pemesananData.id).set(pemesananData);
                 
+const item = pemesananHistory.find(p => p.id === orderId);
+
+if (item) {
+    item.assignment = {
+        totalPeople,
+        salaryPerPerson,
+        members
+    };
+}
+
+renderPemesananHistory();
+
                 // Add to local array
                 pemesananHistory.unshift(pemesananData);
                 
@@ -10032,7 +10065,23 @@ Terima kasih telah berbelanja!
                                 </div>
                             </div>
                             <div class="detail-items" id="detail-items"></div>
-                            <div class="detail-total" id="detail-total" style="margin-top: 16px; font-weight: 700; font-size: 1.05rem;"></div>
+                            <div style="margin-bottom:16px;padding:12px;background:#f8fafc;border-radius:8px;">
+                                <label style="display:block;margin-bottom:8px;font-weight:600;">
+                                    Assign Jumlah Orang
+                                </label>
+
+                                 <input
+                                    type="number"
+                                    id="assign-person-count"
+                                    min="1"
+                                    value="1"
+                                    class="form-control"
+                                    onchange="updateSalaryPerPerson()"
+                                >
+
+                            <div id="salary-per-person-box" style="margin-top:10px;font-weight:600;color:var(--success);">
+                                Salary Per Orang: Rp 0
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -10053,6 +10102,9 @@ Terima kasih telah berbelanja!
             // Simpan ID untuk update status
             window.currentPemesananId = id;
             
+            window.currentSalaryAfterHT =
+                item?.financials?.raw?.salaryAfterHT || 0;
+
             // Pastikan modal ada
             ensureDetailModalExists();
             
@@ -10151,18 +10203,323 @@ Terima kasih telah berbelanja!
                             <div>Salary After HT:</div>
                             <div>${formatCurrency(f.raw.salaryAfterHT)}</div>
                         </div>
+                        <hr style="margin:12px 0; border:none; border-top:1px dashed #e2e8f0;" />
+
+<div style="margin-top:10px;">
+    <label style="font-weight:600;">
+        Jumlah Orang
+    </label>
+
+<input
+    type="number"
+    id="assignPeople"
+    min="1"
+    value="${item.assignment?.totalPeople || 1}"
+    oninput="updateSalaryPerPerson()"
+    style="
+        width:100%;
+        padding:8px;
+        margin-top:6px;
+        border:1px solid #ddd;
+        border-radius:6px;
+    "
+>
+
+    <button
+        onclick="generateAssignment('${item.id}', ${f.raw.salaryAfterHT})"
+        style="
+            margin-top:10px;
+            width:100%;
+            padding:10px;
+            background:#2563eb;
+            color:white;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        "
+    >
+        Buat Assignment
+    </button>
+
+    <div id="assignmentArea" style="margin-top:10px;"></div>
                     </div>
                 `;
             }
 
             detailItems.innerHTML = itemsHtml;
 
+            if (item.assignment) {
+
+    const members = item.assignment.members || [];
+
+    let assignmentHtml = '';
+
+    members.forEach((name, index) => {
+        assignmentHtml += `
+            <input
+                type="text"
+                class="member-name"
+                value="${name}"
+                disabled
+                placeholder="Nama Orang ${index + 1}"
+                style="
+                    width:100%;
+                    padding:8px;
+                    margin-top:8px;
+                    border:1px solid #ddd;
+                    border-radius:6px;
+                "
+            >
+        `;
+    });
+
+assignmentHtml += `
+    <div
+        style="
+            margin-top:12px;
+            padding:10px;
+            background:#f0fdf4;
+            border-radius:8px;
+            font-weight:600;
+        "
+    >
+        Salary Per Orang :
+        ${formatCurrency(item.assignment.salaryPerPerson)}
+    </div>
+
+    <div
+        style="
+            margin-top:10px;
+            padding:10px;
+            background:#e8f5e9;
+            border-radius:8px;
+            color:#2e7d32;
+            font-weight:600;
+        "
+    >
+        ✓ Assignment Tersimpan
+    </div>
+
+    <button
+        onclick="enableAssignmentEdit()"
+        style="
+            margin-top:10px;
+            width:100%;
+            padding:10px;
+            background:#f59e0b;
+            color:white;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        "
+    >
+        Edit Assignment
+    </button>
+`;
+    
+
+    const area = document.getElementById('assignmentArea');
+    const assignInput = document.getElementById('assignPeople');
+
+if (assignInput) {
+    assignInput.disabled = true;
+}
+
+    if (area) {
+        area.innerHTML = assignmentHtml;
+    }
+}
+
             // Fill total
             detailTotal.textContent = `Rp ${(item.totalUangDiterima || 0).toLocaleString('id-ID')}`;
-            
             // Show modal
             detailModal.classList.add('active');
         }
+
+async function saveAssignment(orderId, salaryAfterHT) {
+
+    const totalPeople =
+        parseInt(document.getElementById('assignPeople').value) || 1;
+
+    const members =
+        [...document.querySelectorAll('.member-name')]
+        .map(x => x.value.trim());
+
+    if (members.some(x => !x)) {
+        alert('Semua nama wajib diisi');
+        return;
+    }
+
+    const salaryPerPerson =
+        Math.floor(salaryAfterHT / totalPeople);
+
+await db.collection("pemesanan_barang")
+    .doc(orderId)
+    .update({
+        assignment: {
+            totalPeople,
+            salaryPerPerson,
+            members,
+            assignedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }
+    });
+    // Update local array
+    const item = pemesananHistory.find(
+        x => x.id === orderId
+    );
+
+    if (item) {
+        item.assignment = {
+            totalPeople,
+            salaryPerPerson,
+            members
+        };
+    }
+
+    // Refresh isi modal
+    showDetailModal(orderId);
+
+    console.log("SAVED TO FIRESTORE");
+    renderPemesananHistory();
+}
+
+function enableAssignmentEdit() {
+
+    const assignPeople =
+        document.getElementById('assignPeople');
+
+    if (assignPeople) {
+        assignPeople.disabled = false;
+    }
+
+    document
+        .querySelectorAll('.member-name')
+        .forEach(input => {
+            input.disabled = false;
+            input.style.background = '#fff';
+        });
+
+    const area =
+        document.getElementById('assignmentArea');
+
+    if (!document.getElementById('save-edit-btn')) {
+
+        area.insertAdjacentHTML(
+            'beforeend',
+            `
+            <button
+                id="save-edit-btn"
+                onclick="saveAssignment('${window.currentPemesananId}', ${window.currentSalaryAfterHT})"
+                style="
+                    margin-top:10px;
+                    width:100%;
+                    padding:10px;
+                    background:#16a34a;
+                    color:white;
+                    border:none;
+                    border-radius:6px;
+                    cursor:pointer;
+                "
+            >
+                Simpan Perubahan
+            </button>
+            `
+        );
+    }
+}
+
+function updateSalaryPerPerson() {
+
+    const input = document.getElementById('assignPeople');
+    const area = document.getElementById('salaryPreview');
+
+    if (!input || !area) return;
+
+    const totalPeople = parseInt(input.value) || 1;
+
+    const salaryAfterHT = window.currentSalaryAfterHT || 0;
+
+    const salaryPerPerson = Math.floor(
+        salaryAfterHT / totalPeople
+    );
+
+    area.innerHTML = `
+        <div
+            style="
+                margin-top:10px;
+                padding:10px;
+                background:#f0fdf4;
+                border-radius:8px;
+                font-weight:600;
+                color:#166534;
+            "
+        >
+            Salary Per Orang :
+            ${formatCurrency(salaryPerPerson)}
+        </div>
+    `;
+}
+
+function generateAssignment(orderId, salaryAfterHT) {
+
+    const total =
+        parseInt(document.getElementById('assignPeople').value) || 1;
+
+    const perPerson =
+        Math.floor(salaryAfterHT / total);
+
+    let html = '';
+
+    for (let i = 1; i <= total; i++) {
+
+        html += `
+            <input
+                type="text"
+                class="member-name"
+                placeholder="Nama Orang ${i}"
+                style="
+                    width:100%;
+                    padding:8px;
+                    margin-top:8px;
+                    border:1px solid #ddd;
+                    border-radius:6px;
+                "
+            >
+        `;
+    }
+
+    html += `
+        <div
+            style="
+                margin-top:12px;
+                padding:10px;
+                background:#f0fdf4;
+                border-radius:8px;
+                font-weight:600;
+            "
+        >
+            Salary Per Orang :
+            ${formatCurrency(perPerson)}
+        </div>
+
+        <button
+            onclick="saveAssignment('${orderId}', ${salaryAfterHT})"
+            style="
+                margin-top:10px;
+                width:100%;
+                padding:10px;
+                background:#16a34a;
+                color:white;
+                border:none;
+                border-radius:6px;
+            "
+        >
+            Simpan Assignment
+        </button>
+    `;
+
+    document.getElementById('assignmentArea').innerHTML = html;
+}
 
         async function saveDetailPJ() {
             const id = window.currentPemesananId;
@@ -10184,8 +10541,7 @@ Terima kasih telah berbelanja!
                 console.error('Error updating PJ:', error);
                 addNotification('error', 'Error', 'Gagal memperbarui PJ.');
             }
-        }
-        
+        }     
         function updateStatusModal(status) {
             const id = window.currentPemesananId;
             if (!id) return;
