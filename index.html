@@ -7350,11 +7350,33 @@ async function loadTopProductsReport() {
                 let totalOrders = 0;
                 let totalIncome = 0;
                 
-                ordersSnapshot.forEach(doc => {
-                    const order = doc.data();
-                    totalOrders++;
-                    totalIncome += order.total || 0;
-                });
+ordersSnapshot.forEach(doc => {
+
+    const order = doc.data();
+
+    totalOrders++;
+
+    let orderIncome = 0;
+
+    if (order.items && Array.isArray(order.items)) {
+
+        order.items.forEach(item => {
+
+            if (!item.supplierOrdered) {
+
+                orderIncome +=
+                    (item.price || 0) *
+                    (item.quantity || 0);
+
+            }
+
+        });
+
+    }
+
+    totalIncome += orderIncome;
+
+});
                 
                 document.getElementById('total-orders').textContent = totalOrders;
                 document.getElementById('total-income').textContent = `Rp ${totalIncome.toLocaleString('id-ID')}`;
@@ -7999,7 +8021,25 @@ async function loadReports() {
                 const order = doc.data();
                 orders.push(order);
                 totalOrders++;
-                totalRevenue += order.total || 0;
+                let orderRevenue = 0;
+
+if (order.items) {
+
+    order.items.forEach(item => {
+
+        if (!item.supplierOrdered) {
+
+            orderRevenue +=
+                (item.price || 0) *
+                (item.quantity || 0);
+
+        }
+
+    });
+
+}
+
+totalRevenue += orderRevenue;
                 
                 if (order.customerName) {
                     customers.add(order.customerName);
@@ -8012,7 +8052,7 @@ async function loadReports() {
                     
                     if (salesByDate[dateKey]) {
                         salesByDate[dateKey].orders++;
-                        salesByDate[dateKey].revenue += order.total || 0;
+                        salesByDate[dateKey].revenue += orderRevenue;
                         if (order.customerName) {
                             salesByDate[dateKey].customers.add(order.customerName);
                         }
@@ -8506,25 +8546,56 @@ async function viewOrderDetail(orderId) {
                             
                             <h4>Item Pesanan:</h4>
                             <div style="margin-bottom: 20px;">
-                                ${order.items ? order.items.map(item => {
+                                ${order.items ? order.items.map((item, index) => {
                                     const isPreorder = item.status === 'preorder';
                                     const statusBadge = isPreorder 
                                         ? '<span class="product-status-badge preorder" style="margin-left: 10px;">Pre-Order</span>' 
                                         : '';
                                     
-                                    return `
-                                        <div style="padding: 10px; border-bottom: 1px solid #e2e8f0;">
-                                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div>
-                                                    ${item.name} ${statusBadge}<br>
-                                                    <small>${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}</small>
-                                                </div>
-                                                <div>
-                                                    <strong>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
+return `
+    <div style="
+        padding: 10px;
+        border-bottom: 1px solid #e2e8f0;
+        ${item.supplierOrdered ? 'opacity:0.6;' : ''}
+    ">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                ${item.name} ${statusBadge}<br>
+
+                <small>
+                    ${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}
+                </small>
+
+                <br>
+
+                <label style="
+                    display:flex;
+                    align-items:center;
+                    gap:6px;
+                    margin-top:6px;
+                    font-size:12px;
+                ">
+                    <input
+                        type="checkbox"
+                        ${item.supplierOrdered ? 'checked' : ''}
+                        onchange="toggleSupplierOrdered(
+                            '${orderId}',
+                            ${index},
+                            this.checked
+                        )"
+                    >
+                    Sudah dipesan ke supplier
+                </label>
+            </div>
+
+            <div>
+                <strong>
+                    Rp ${(item.price * item.quantity).toLocaleString('id-ID')}
+                </strong>
+            </div>
+        </div>
+    </div>
+`;
                                 }).join('') : 'Tidak ada detail item'}
                             </div>
                             
@@ -8564,6 +8635,46 @@ async function viewOrderDetail(orderId) {
     } catch (error) {
         console.error("❌ Error viewing order detail:", error);
         addNotification('error', 'Error', 'Gagal memload detail pesanan');
+    }
+}
+
+async function toggleSupplierOrdered(orderId, itemIndex, checked) {
+
+    try {
+
+        const doc = await ordersRef.doc(orderId).get();
+
+        if (!doc.exists) return;
+
+        const order = doc.data();
+
+        order.items[itemIndex].supplierOrdered = checked;
+
+        await ordersRef.doc(orderId).update({
+            items: order.items
+        });
+
+        await loadDashboardStats();
+
+        if (
+    document.getElementById('reports') &&
+    document.getElementById('reports').classList.contains('active')
+) {
+    await loadReports();
+}
+
+closeOrderDetail();
+viewOrderDetail(orderId);
+
+    } catch (error) {
+
+        console.error(error);
+
+        addNotification(
+            'error',
+            'Error',
+            'Gagal update status supplier'
+        );
     }
 }
         
@@ -9475,13 +9586,15 @@ async function updateCartQuantity(productId, change, newValue = null) {
                     customerPhone: currentOrderSummary.customerPhone,
                     paymentRecipient: currentOrderSummary.paymentRecipient,
                     paymentMethod: currentOrderSummary.paymentMethod,
-                    items: currentOrderSummary.items.map(item => ({
-                        productId: item.id,
-                        name: item.name,
-                        price: item.price,
-                        quantity: item.quantity,
-                        status: item.status || 'ready' // Tambahkan status produk
-                    })),
+items: currentOrderSummary.items.map(item => ({
+    productId: item.id,
+    name: item.name,
+    price: item.price,
+    quantity: item.quantity,
+    status: item.status || 'ready',
+
+    supplierOrdered: false
+})),
                     subtotal: currentOrderSummary.subtotal,
                     tax: currentOrderSummary.tax,
                     shipping: currentOrderSummary.shipping,
