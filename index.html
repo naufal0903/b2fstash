@@ -8675,12 +8675,14 @@ function generateAssignment(orderId, salaryAfterHT) {
        Admin picks from that list; prices auto-calculated.
     ===================================================== */
 
-    var _paDb      = null;
-    var _paPending = null;
-    var _paCurrId  = null;
+    var _paDb        = null;
+    var _paPending   = null;
+    var _paCurrId    = null;
+    var _paBasePrice = 0;      // base price of the product currently in customer modal
+    var _paIsAmmo    = false;  // whether the current product is Ammo category
 
-    var PA_CATS    = ['Class 1', 'Class 2', 'Class 3'];
-    var PA_ATT_CAT = 'Attachment';
+    var PA_CATS     = ['Class 1', 'Class 2', 'Class 3'];
+    var PA_ATT_CATS = ['Attachment', 'Ammo'];
     var PA_DEF_IMG = 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';
 
     function _paGetDb() { if (!_paDb) _paDb = firebase.firestore(); return _paDb; }
@@ -8709,7 +8711,7 @@ function generateAssignment(orderId, salaryAfterHT) {
             .then(function(snap) {
                 if (snap.exists && Array.isArray(snap.data().attachments))
                     savedIds = snap.data().attachments.filter(Boolean);
-                return _paGetDb().collection('products').where('category', '==', PA_ATT_CAT).get();
+                return _paGetDb().collection('products').where('category', 'in', PA_ATT_CATS).get();
             })
             .then(function(qs) {
                 var list = [];
@@ -8800,6 +8802,9 @@ function generateAssignment(orderId, salaryAfterHT) {
                         + '</div></div>';
                 }
 
+                _paBasePrice = basePrice;
+                _paIsAmmo    = (info.category === 'Ammo');
+
                 var attIds = Array.isArray(prod.attachments) ? prod.attachments.filter(Boolean) : [];
                 if (!attIds.length) {
                     if (lDiv) lDiv.innerHTML = '<p style="color:var(--text-3);font-size:.875rem;text-align:center;padding:16px 0;"><i class="fas fa-info-circle"></i> Tidak ada attachment tersedia untuk produk ini.</p>';
@@ -8812,7 +8817,7 @@ function generateAssignment(orderId, salaryAfterHT) {
                     for (var i = 0; i < snaps.length; i++) {
                         if (snaps[i].exists) list.push({ id: snaps[i].id, d: snaps[i].data() });
                     }
-                    _paRenderAttList(lDiv, list, basePrice);
+                    _paRenderAttList(lDiv, list, basePrice, _paIsAmmo);
                 });
             })
             .catch(function(err) {
@@ -8821,42 +8826,81 @@ function generateAssignment(orderId, salaryAfterHT) {
             });
     }
 
-    function _paRenderAttList(lDiv, list, basePrice) {
+    function _paRenderAttList(lDiv, list, basePrice, isAmmo) {
         if (!lDiv) return;
         if (!list.length) {
             lDiv.innerHTML = '<p style="color:var(--text-3);font-size:.875rem;text-align:center;padding:16px 0;"><i class="fas fa-info-circle"></i> Tidak ada attachment tersedia.</p>';
-            _paCalcTotal(basePrice);
+            _paCalcTotal();
             return;
         }
         var html = '<div style="display:flex;flex-direction:column;gap:8px;">';
         for (var i = 0; i < list.length; i++) {
             var p = list[i], d = p.d;
-            var img = d.imageUrl || PA_DEF_IMG;
-            html += '<label style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:2px solid var(--border);border-radius:var(--r-sm);cursor:pointer;transition:border-color .15s;"'
-                 +  ' onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="if(!this.querySelector(\'input\').checked)this.style.borderColor=\'var(--border)\'">'
-                 +  '<input type="checkbox" class="pam-att-chk" value="' + _paEsc(p.id) + '" data-price="' + (d.price || 0) + '"'
-                 +  ' style="width:17px;height:17px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;"'
-                 +  ' onchange="_paCalcTotal(' + basePrice + ');this.closest(\'label\').style.borderColor=this.checked?\'var(--gold)\':\' var(--border)\'">'
-                 +  '<img src="' + _paEsc(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">'
-                 +  '<div style="flex:1;min-width:0;">'
-                 +  '  <div style="font-weight:600;font-size:.875rem;color:var(--text);">' + _paEsc(d.name || '') + '</div>'
-                 +  '  <div style="font-size:.75rem;color:var(--text-2);">' + _paEsc(d.category || '') + '</div>'
-                 +  '</div>'
-                 +  '<div style="font-size:.9rem;color:var(--green);font-weight:700;white-space:nowrap;">+' + _paFmt(d.price) + '</div>'
-                 +  '</label>';
+            var img  = d.imageUrl || PA_DEF_IMG;
+            var price = d.price || 0;
+            if (d.category === 'Ammo') {
+                /* ── Qty mode (Ammo products) ── */
+                html += '<div class="pam-qty-row" data-id="' + _paEsc(p.id) + '" data-price="' + price + '"'
+                     +  ' style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:2px solid var(--border);border-radius:var(--r-sm);transition:border-color .15s;">'
+                     +  '<img src="' + _paEsc(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">'
+                     +  '<div style="flex:1;min-width:0;">'
+                     +  '  <div style="font-weight:600;font-size:.875rem;color:var(--text);">' + _paEsc(d.name || '') + '</div>'
+                     +  '  <div style="font-size:.75rem;color:var(--text-2);">' + _paEsc(d.category || '') + '</div>'
+                     +  '</div>'
+                     +  '<div style="font-size:.85rem;color:var(--green);font-weight:700;white-space:nowrap;min-width:72px;text-align:right;">+' + _paFmt(price) + '</div>'
+                     +  '<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">'
+                     +  '  <button onclick="_paQtyChange(this,-1)" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">-</button>'
+                     +  '  <span class="pam-qty-val" style="min-width:22px;text-align:center;font-weight:700;font-size:.9rem;color:var(--text);">0</span>'
+                     +  '  <button onclick="_paQtyChange(this,1)" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">+</button>'
+                     +  '</div>'
+                     +  '</div>';
+            } else {
+                /* ── Checkbox mode (Class 1/2/3 products) ── */
+                html += '<label style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:2px solid var(--border);border-radius:var(--r-sm);cursor:pointer;transition:border-color .15s;"'
+                     +  ' onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="if(!this.querySelector(\'input\').checked)this.style.borderColor=\'var(--border)\'">'
+                     +  '<input type="checkbox" class="pam-att-chk" value="' + _paEsc(p.id) + '" data-price="' + price + '"'
+                     +  ' style="width:17px;height:17px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;"'
+                     +  ' onchange="_paCalcTotal();this.closest(\'label\').style.borderColor=this.checked?\'var(--gold)\':\' var(--border)\'">'
+                     +  '<img src="' + _paEsc(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">'
+                     +  '<div style="flex:1;min-width:0;">'
+                     +  '  <div style="font-weight:600;font-size:.875rem;color:var(--text);">' + _paEsc(d.name || '') + '</div>'
+                     +  '  <div style="font-size:.75rem;color:var(--text-2);">' + _paEsc(d.category || '') + '</div>'
+                     +  '</div>'
+                     +  '<div style="font-size:.9rem;color:var(--green);font-weight:700;white-space:nowrap;">+' + _paFmt(price) + '</div>'
+                     +  '</label>';
+            }
         }
         html += '</div>';
         lDiv.innerHTML = html;
-        _paCalcTotal(basePrice);
+        _paCalcTotal();
     }
 
-    function _paCalcTotal(basePrice) {
+    function _paQtyChange(btn, delta) {
+        var row   = btn.closest('.pam-qty-row');
+        if (!row) return;
+        var span  = row.querySelector('.pam-qty-val');
+        var cur   = parseInt(span.textContent || '0', 10);
+        var next  = Math.max(0, cur + delta);
+        span.textContent = next;
+        row.style.borderColor = next > 0 ? 'var(--gold)' : 'var(--border)';
+        _paCalcTotal();
+    }
+
+    function _paCalcTotal() {
         var totEl = document.getElementById('pam-total-price');
         if (!totEl) return;
-        var chks = document.querySelectorAll('.pam-att-chk:checked');
         var extra = 0;
+        // checkbox mode
+        var chks = document.querySelectorAll('.pam-att-chk:checked');
         for (var i = 0; i < chks.length; i++) extra += parseInt(chks[i].getAttribute('data-price') || '0', 10);
-        totEl.textContent = _paFmt(basePrice + extra);
+        // qty mode
+        var rows = document.querySelectorAll('.pam-qty-row');
+        for (var j = 0; j < rows.length; j++) {
+            var qty  = parseInt(rows[j].querySelector('.pam-qty-val').textContent || '0', 10);
+            var price = parseInt(rows[j].getAttribute('data-price') || '0', 10);
+            extra += qty * price;
+        }
+        totEl.textContent = _paFmt(_paBasePrice + extra);
     }
 
     function closePreorderAttachmentModal() {
@@ -8874,13 +8918,20 @@ function generateAssignment(orderId, salaryAfterHT) {
     function confirmPreorderAttachment() {
         var m = document.getElementById('preorder-attachment-modal');
         if (m) m.classList.remove('active');
-        var chks = document.querySelectorAll('.pam-att-chk:checked');
-        var selIds = [];
-        for (var i = 0; i < chks.length; i++) selIds.push(chks[i].value);
         var id = _paPending; _paPending = null;
-        if (id) {
-            addToCart(id);
-            for (var j = 0; j < selIds.length; j++) addToCart(selIds[j]);
+        if (!id) return;
+        addToCart(id);
+        // checkbox-mode selections
+        var chks = document.querySelectorAll('.pam-att-chk:checked');
+        for (var i = 0; i < chks.length; i++) addToCart(chks[i].value);
+        // qty-mode selections
+        var rows = document.querySelectorAll('.pam-qty-row');
+        for (var j = 0; j < rows.length; j++) {
+            var qty = parseInt(rows[j].querySelector('.pam-qty-val').textContent || '0', 10);
+            if (qty > 0) {
+                var attId = rows[j].getAttribute('data-id');
+                for (var k = 0; k < qty; k++) addToCart(attId);
+            }
         }
     }
 
