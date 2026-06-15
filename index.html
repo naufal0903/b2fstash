@@ -717,6 +717,17 @@ tr:hover td { background: var(--surface-2); }
 }
 .product-status-badge.ready    { background: var(--green-bg);  color: var(--green-text); border: 1px solid var(--green-border); }
 .product-status-badge.preorder { background: var(--orange-bg); color: var(--orange-text);border: 1px solid var(--orange-border); }
+.product-discount-badge {
+    position: absolute; top: 10px; left: 10px; z-index: 2;
+    background: var(--red); color: #fff;
+    font-size: .75rem; font-weight: 800; letter-spacing: .03em;
+    padding: 4px 10px; border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.28);
+}
+.product-price-original {
+    font-size: .78rem; color: var(--text-3); text-decoration: line-through;
+    margin-bottom: 1px;
+}
 
 /* ===== FORMS ===== */
 .form-group { margin-bottom: 16px; }
@@ -1979,9 +1990,10 @@ body.login-active::before {
                         <tr>
                             <th>Nama Produk</th>
                             <th>Kategori</th>
+                            <th>Status</th>
                             <th>Harga</th>
                             <th>Stok</th>
-                            <th>Status</th>
+                            <th style="text-align:center;">Diskon</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -5356,29 +5368,41 @@ function createProductCard(product) {
     card.dataset.status = product.status || 'ready';
     
     const imageUrl = product.imageUrl || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&auto=format&fit=crop';
-    
-    const statusBadge = product.status === 'preorder' 
-        ? '<span class="product-status-badge preorder">Pre-Order</span>' 
+
+    const statusBadge = product.status === 'preorder'
+        ? '<span class="product-status-badge preorder">Pre-Order</span>'
         : '<span class="product-status-badge ready">Ready Stock</span>';
-    
-    const isAvailable = true; // Selalu tersedia untuk pre-order
-    const stockDisplay = product.status === 'preorder' 
-        ? 'Pre-Order (Tersedia)' 
+
+    const isAvailable = true;
+    const stockDisplay = product.status === 'preorder'
+        ? 'Pre-Order (Tersedia)'
         : `${product.stock || 0} unit`;
-    
+
+    const discount = product.discount || 0;
+    const basePrice = product.price || 0;
+    const discountedPrice = discount > 0 ? Math.round(basePrice * (1 - discount / 100)) : basePrice;
+    const discountBadgeHtml = discount > 0
+        ? `<span class="product-discount-badge">-${discount}%</span>`
+        : '';
+    const priceHtml = discount > 0
+        ? `<div class="product-price-original">Rp ${basePrice.toLocaleString('id-ID')}</div>
+           <div class="product-price">Rp ${discountedPrice.toLocaleString('id-ID')}</div>`
+        : `<div class="product-price">Rp ${basePrice.toLocaleString('id-ID')}</div>`;
+
     card.innerHTML = `
         <div class="product-image">
-            <img src="${imageUrl}" alt="${product.name}" 
+            ${discountBadgeHtml}
+            <img src="${imageUrl}" alt="${product.name}"
                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';">
         </div>
         <div class="product-info">
-            <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+            <div style="display: flex; gap: 5px; margin-bottom: 8px; flex-wrap:wrap;">
                 <div class="product-category-badge">${product.category}</div>
                 ${statusBadge}
             </div>
             <h3 class="product-title">${product.name}</h3>
             <p class="product-description">${product.description || 'Tidak ada deskripsi'}</p>
-            <div class="product-price">Rp ${(product.price || 0).toLocaleString('id-ID')}</div>
+            ${priceHtml}
             <div class="product-stock ${isAvailable ? 'in-stock' : 'out-of-stock'}">
                 ${product.status === 'preorder' ? 'Status: Pre-Order (Bisa Dipesan)' : `Stok: ${stockDisplay}`}
             </div>
@@ -5516,13 +5540,28 @@ async function loadProductsManagement() {
                 // Tampilan stok
                 const stockText = status === 'preorder' ? '-' : stockDisplay;
                 
+                const discPct = product.discount || 0;
+                const discLabel = discPct > 0
+                    ? `<span style="background:var(--red);color:#fff;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:12px;">-${discPct}%</span>`
+                    : '<span style="color:var(--text-3);font-size:.8rem;">–</span>';
+                const rawPrice = product.price || 0;
+                const finalPrice = discPct > 0 ? Math.round(rawPrice * (1 - discPct / 100)) : rawPrice;
+                const priceCell = discPct > 0
+                    ? `<span style="font-size:.75rem;color:var(--text-3);text-decoration:line-through;display:block;">Rp ${rawPrice.toLocaleString('id-ID')}</span>
+                       <span style="font-weight:700;color:var(--green);">Rp ${finalPrice.toLocaleString('id-ID')}</span>`
+                    : `Rp ${rawPrice.toLocaleString('id-ID')}`;
+
                 row.innerHTML = `
                     <td>${product.name}</td>
                     <td>${product.category}</td>
                     <td>${statusBadge}</td>
-                    <td>Rp ${(product.price || 0).toLocaleString('id-ID')}</td>
+                    <td>${priceCell}</td>
                     <td>${stockText}</td>
+                    <td style="text-align:center;">${discLabel}</td>
                     <td>
+                        <button class="btn btn-secondary" title="Set Diskon" onclick="openDiscountModal('${doc.id}', ${discPct})">
+                            <i class="fas fa-tag"></i>
+                        </button>
                         <button class="btn btn-secondary" onclick="editProduct('${doc.id}')">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -6901,10 +6940,14 @@ async function addToCart(productId) {
         if (existingItem) {
             existingItem.quantity++;
         } else {
+            const _disc = product.discount || 0;
+            const _finalPrice = _disc > 0
+                ? Math.round((product.price || 0) * (1 - _disc / 100))
+                : (product.price || 0);
             cart.push({
                 id: productId,
                 name: product.name,
-                price: product.price,
+                price: _finalPrice,
                 quantity: 1,
                 imageUrl: product.imageUrl || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400',
                 status: product.status || 'ready'
@@ -8638,6 +8681,27 @@ function generateAssignment(orderId, salaryAfterHT) {
     <!-- ═══════════════════════════════════════════════════════════
          PRE-ORDER ATTACHMENT SELECTION MODAL (Customer)
     ════════════════════════════════════════════════════════════ -->
+    <div class="modal" id="discount-modal">
+        <div class="modal-content" style="max-width:360px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-tag" style="color:var(--red);margin-right:8px;"></i>Set Diskon Produk</h3>
+                <button class="close-modal" onclick="closeDiscountModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:.875rem;color:var(--text-2);margin-bottom:14px;">Masukkan persentase diskon. Set ke <strong>0</strong> untuk menghapus diskon.</p>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+                    <input type="number" id="discount-input" min="0" max="100" step="1" value="0"
+                        style="flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text);font-size:1.1rem;font-weight:700;">
+                    <span style="font-size:1.3rem;color:var(--text);font-weight:700;">%</span>
+                </div>
+                <div style="display:flex;gap:10px;">
+                    <button class="btn btn-secondary" onclick="closeDiscountModal()" style="flex:1;justify-content:center;">Batal</button>
+                    <button class="btn btn-primary" onclick="saveDiscount()" style="flex:1;justify-content:center;background:var(--red);"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="preorder-attachment-modal">
         <div class="modal-content" style="max-width:500px;">
             <div class="modal-header">
@@ -8674,6 +8738,44 @@ function generateAssignment(orderId, salaryAfterHT) {
        Attachments are products with category "Attachment".
        Admin picks from that list; prices auto-calculated.
     ===================================================== */
+
+    /* ===== Discount helpers ===== */
+    var _discProductId = null;
+
+    function openDiscountModal(productId, currentDiscount) {
+        _discProductId = productId;
+        var inp = document.getElementById('discount-input');
+        if (inp) inp.value = currentDiscount || 0;
+        var m = document.getElementById('discount-modal');
+        if (m.parentElement !== document.body) document.body.appendChild(m);
+        m.classList.add('active');
+    }
+
+    function closeDiscountModal() {
+        var m = document.getElementById('discount-modal');
+        if (m) m.classList.remove('active');
+        _discProductId = null;
+    }
+
+    async function saveDiscount() {
+        var pct = parseInt(document.getElementById('discount-input').value || '0', 10);
+        if (isNaN(pct) || pct < 0 || pct > 100) {
+            addNotification('error', 'Error', 'Diskon harus antara 0–100%');
+            return;
+        }
+        if (!_discProductId) return;
+        try {
+            await firebase.firestore().collection('products').doc(_discProductId).update({ discount: pct });
+            closeDiscountModal();
+            addNotification('success', 'Berhasil', 'Diskon ' + pct + '% berhasil disimpan');
+            loadProductsManagement();
+            loadMarketplaceProducts();
+        } catch(e) {
+            console.error('[Diskon]', e);
+            addNotification('error', 'Error', 'Gagal menyimpan diskon');
+        }
+    }
+    /* ===== End Discount helpers ===== */
 
     var _paDb        = null;
     var _paPending   = null;
@@ -8788,17 +8890,26 @@ function generateAssignment(orderId, salaryAfterHT) {
         _paGetDb().collection('products').doc(productId).get()
             .then(function(snap) {
                 var prod = snap.exists ? snap.data() : {};
-                var basePrice = prod.price || 0;
+                var rawPrice  = prod.price || 0;
+                var disc      = prod.discount || 0;
+                var basePrice = disc > 0 ? Math.round(rawPrice * (1 - disc / 100)) : rawPrice;
                 var imgUrl    = prod.imageUrl || PA_DEF_IMG;
                 var name      = prod.name || info.name || '';
+                var statusLabel = info.status === 'preorder' ? 'Pre-Order' : 'Ready Stock';
+
+                var priceDisplay = disc > 0
+                    ? '<span style="font-size:.78rem;color:var(--text-3);text-decoration:line-through;margin-right:6px;">' + _paFmt(rawPrice) + '</span>'
+                      + '<span style="font-size:.92rem;color:var(--green);font-weight:700;">' + _paFmt(basePrice) + '</span>'
+                      + '<span style="font-size:.7rem;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;margin-left:5px;font-weight:700;">-' + disc + '%</span>'
+                    : '<span style="font-size:.92rem;color:var(--green);font-weight:700;">' + _paFmt(basePrice) + '</span>';
 
                 if (iDiv) {
                     iDiv.innerHTML = '<div style="display:flex;align-items:center;gap:14px;">'
                         + '<img src="' + _paEsc(imgUrl) + '" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;border:2px solid var(--border);">'
                         + '<div>'
                         + '  <div style="font-weight:700;color:var(--text);font-size:.95rem;">' + _paEsc(name) + '</div>'
-                        + '  <div style="font-size:.78rem;color:var(--text-2);margin:2px 0;"><strong>' + _paEsc(info.category) + '</strong> &middot; Pre-Order</div>'
-                        + '  <div style="font-size:.92rem;color:var(--green);font-weight:700;">' + _paFmt(basePrice) + '</div>'
+                        + '  <div style="font-size:.78rem;color:var(--text-2);margin:2px 0;"><strong>' + _paEsc(info.category) + '</strong> &middot; ' + statusLabel + '</div>'
+                        + '  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:2px;">' + priceDisplay + '</div>'
                         + '</div></div>';
                 }
 
@@ -8836,8 +8947,18 @@ function generateAssignment(orderId, salaryAfterHT) {
         var html = '<div style="display:flex;flex-direction:column;gap:8px;">';
         for (var i = 0; i < list.length; i++) {
             var p = list[i], d = p.d;
-            var img  = d.imageUrl || PA_DEF_IMG;
-            var price = d.price || 0;
+            var img      = d.imageUrl || PA_DEF_IMG;
+            var rawPrice = d.price || 0;
+            var attDisc  = d.discount || 0;
+            var price    = attDisc > 0 ? Math.round(rawPrice * (1 - attDisc / 100)) : rawPrice;
+            var attPriceHtml = attDisc > 0
+                ? '<div style="text-align:right;">'
+                  + '<span style="font-size:.72rem;color:var(--text-3);text-decoration:line-through;display:block;">+' + _paFmt(rawPrice) + '</span>'
+                  + '<span style="font-size:.85rem;color:var(--green);font-weight:700;">+' + _paFmt(price) + '</span>'
+                  + '<span style="font-size:.65rem;background:var(--red);color:#fff;border-radius:8px;padding:1px 5px;margin-left:4px;font-weight:700;">-' + attDisc + '%</span>'
+                  + '</div>'
+                : '<div style="font-size:.9rem;color:var(--green);font-weight:700;white-space:nowrap;">+' + _paFmt(price) + '</div>';
+
             if (d.category === 'Ammo') {
                 /* ── Qty mode (Ammo products) ── */
                 html += '<div class="pam-qty-row" data-id="' + _paEsc(p.id) + '" data-price="' + price + '"'
@@ -8847,7 +8968,7 @@ function generateAssignment(orderId, salaryAfterHT) {
                      +  '  <div style="font-weight:600;font-size:.875rem;color:var(--text);">' + _paEsc(d.name || '') + '</div>'
                      +  '  <div style="font-size:.75rem;color:var(--text-2);">' + _paEsc(d.category || '') + '</div>'
                      +  '</div>'
-                     +  '<div style="font-size:.85rem;color:var(--green);font-weight:700;white-space:nowrap;min-width:72px;text-align:right;">+' + _paFmt(price) + '</div>'
+                     +  attPriceHtml
                      +  '<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">'
                      +  '  <button onclick="_paQtyChange(this,-1)" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">-</button>'
                      +  '  <span class="pam-qty-val" style="min-width:22px;text-align:center;font-weight:700;font-size:.9rem;color:var(--text);">0</span>'
@@ -8866,7 +8987,7 @@ function generateAssignment(orderId, salaryAfterHT) {
                      +  '  <div style="font-weight:600;font-size:.875rem;color:var(--text);">' + _paEsc(d.name || '') + '</div>'
                      +  '  <div style="font-size:.75rem;color:var(--text-2);">' + _paEsc(d.category || '') + '</div>'
                      +  '</div>'
-                     +  '<div style="font-size:.9rem;color:var(--green);font-weight:700;white-space:nowrap;">+' + _paFmt(price) + '</div>'
+                     +  attPriceHtml
                      +  '</label>';
             }
         }
@@ -8940,7 +9061,7 @@ function generateAssignment(orderId, salaryAfterHT) {
         if (card._paPatched) return;
         var status   = card.getAttribute('data-status')   || '';
         var category = card.getAttribute('data-category') || '';
-        if (status !== 'preorder') return;
+        if (status !== 'preorder' && status !== 'ready') return;
         var isClass = false;
         for (var k = 0; k < PA_CATS.length; k++) { if (PA_CATS[k] === category) { isClass = true; break; } }
         if (!isClass) return;
