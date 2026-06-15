@@ -6,6 +6,7 @@
     <title>B2F Stash - Dashboard Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/B2F.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bangers&family=Comic+Neue:wght@400;700&family=Boogaloo&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK -->
@@ -2265,7 +2266,10 @@ p, td, th, input, select, textarea, label,
                             <input type="text" id="order-search-2" placeholder="Cari pesanan..." onkeyup="searchOrders()">
                         </div>
                         <button class="btn btn-secondary" onclick="exportOrders()">
-                            <i class="fas fa-download"></i> Export
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-secondary" onclick="openSheetSyncModal()" title="Setup Live Sync ke Google Sheets" id="sync-sheet-btn">
+                            <i class="fas fa-table"></i> <span id="sync-sheet-status">Setup Sync</span>
                         </button>
                     </div>
                 </div>
@@ -5806,7 +5810,8 @@ async function loadAllOrders() {
         });
         
         applyOrderFilter(currentOrderFilter);
-        
+        if (typeof syncToSheet === 'function') syncToSheet();
+
     } catch (error) {
         console.error("❌ Error loading all orders:", error);
         document.getElementById('all-orders-loading').innerHTML = 
@@ -5954,37 +5959,37 @@ function searchOrders() {
 
 // Fungsi export pesanan
 function exportOrders() {
-    console.log("📤 Exporting orders...");
-    
+    console.log("📤 Exporting orders to Excel...");
     try {
-        let csv = 'ID Pesanan,Tanggal,Pelanggan,Telepon,Total,Status,Status Pembayaran,Metode Pembayaran\n';
-        
-        allOrdersData.forEach(order => {
-            const date = order.createdAt ? 
-                new Date(order.createdAt.seconds * 1000).toLocaleDateString('id-ID') : '-';
-            
-            csv += `"${order.orderId || order.id}",`;
-            csv += `"${date}",`;
-            csv += `"${order.customerName || ''}",`;
-            csv += `"${order.customerPhone || ''}",`;
-            csv += `"${order.total || 0}",`;
-            csv += `"${order.status || ''}",`;
-            csv += `"${getPaymentStatusText(order.paymentStatus)}",`;
-            csv += `"${order.paymentMethod || ''}"\n`;
-        });
-        
-        // Create download link
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `pesanan_b2f_${new Date().toISOString().split('T')[0]}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-        addNotification('success', 'Export Berhasil', 'Data pesanan berhasil diexport ke CSV');
-        
+        if (!allOrdersData || allOrdersData.length === 0) {
+            addNotification('warning', 'Peringatan', 'Tidak ada data pesanan untuk diexport');
+            return;
+        }
+
+        const wb = XLSX.utils.book_new();
+
+        function fmtDate(o) {
+            return o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('id-ID') : '-';
+        }
+        function fmtItems(o) {
+            if (!o.items || !o.items.length) return '-';
+            return o.items.map(i => `${i.name} x${i.quantity}`).join(', ');
+        }
+
+        const hdr = ['No', 'Tanggal', 'Nama Pemesan', 'No. Telepon', 'List Pesanan', 'Total Harga', 'Status', 'Status Bayar', 'Metode'];
+        const rows = allOrdersData.map((o, i) => [
+            i + 1, fmtDate(o), o.customerName || '-', o.customerPhone || '-',
+            fmtItems(o), o.total || 0, o.status || '-',
+            getPaymentStatusText(o.paymentStatus), o.paymentMethod || '-'
+        ]);
+        const ws = XLSX.utils.aoa_to_sheet([hdr, ...rows]);
+        ws['!cols'] = [4, 12, 22, 16, 44, 14, 12, 14, 14].map(w => ({ wch: w }));
+        XLSX.utils.book_append_sheet(wb, ws, 'Pesanan');
+
+        const fileName = `pesanan_b2f_${new Date().toISOString().split('T')[0]}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+        addNotification('success', 'Export Berhasil', `${allOrdersData.length} pesanan diexport ke ${fileName}`);
+
     } catch (error) {
         console.error("❌ Error exporting orders:", error);
         addNotification('error', 'Error', 'Gagal mengexport data pesanan');
@@ -8881,6 +8886,115 @@ function generateAssignment(orderId, salaryAfterHT) {
     <!-- ═══════════════════════════════════════════════════════════
          PRE-ORDER ATTACHMENT SELECTION MODAL (Customer)
     ════════════════════════════════════════════════════════════ -->
+    <!-- Google Sheets Sync Modal -->
+    <div class="modal" id="sheet-sync-modal">
+        <div class="modal-content" style="max-width:520px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-table" style="color:var(--green);margin-right:8px;"></i>Live Sync ke Google Sheets</h3>
+                <button class="close-modal" onclick="closeSheetSyncModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Step 1: Script setup guide -->
+                <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;margin-bottom:16px;">
+                    <div style="font-weight:700;font-size:.82rem;color:var(--text);margin-bottom:8px;"><i class="fas fa-info-circle" style="color:var(--blue);margin-right:6px;"></i>Cara Setup (sekali saja)</div>
+                    <ol style="font-size:.78rem;color:var(--text-2);line-height:1.8;padding-left:18px;margin:0;">
+                        <li>Buka spreadsheet kamu → <strong>Extensions → Apps Script</strong></li>
+                        <li>Hapus kode yang ada, paste kode di bawah, lalu <strong>Save</strong></li>
+                        <li>Klik <strong>Deploy → New deployment → Web App</strong></li>
+                        <li>Execute as: <strong>Me</strong> · Who has access: <strong>Anyone</strong></li>
+                        <li>Klik Deploy, copy URL-nya, paste di bawah</li>
+                    </ol>
+                </div>
+
+                <!-- Apps Script code -->
+                <div style="margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                        <span style="font-size:.78rem;font-weight:700;color:var(--text);">Kode Apps Script:</span>
+                        <button class="btn btn-secondary" onclick="copyScriptCode()" style="padding:3px 10px;font-size:.72rem;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <pre id="apps-script-code" style="background:#1e1e1e;color:#d4d4d4;padding:12px;border-radius:var(--r-sm);font-size:.72rem;overflow-x:auto;line-height:1.6;white-space:pre;">function doPost(e) {
+  try {
+    var data  = JSON.parse(e.postData.contents);
+    var ss    = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(data.sheetName);
+    if (!sheet) sheet = ss.insertSheet(data.sheetName);
+    sheet.clearContents();
+
+    // ── Tabel utama (kolom A dst) ──
+    var all = [data.headers].concat(data.rows);
+    sheet.getRange(1, 1, all.length, data.headers.length).setValues(all);
+    sheet.getRange(1, 1, 1, data.headers.length)
+         .setFontWeight('bold').setBackground('#C9A230').setFontColor('#ffffff');
+    sheet.setFrozenRows(1);
+
+    // ── Tabel ringkasan (kolom L = 12) ──
+    if (data.summary && data.summary.length) {
+      var sumCol = 12; // kolom L
+      var sumRange = sheet.getRange(1, sumCol, data.summary.length, 2);
+      sumRange.setValues(data.summary);
+
+      // Header "RINGKASAN"
+      var hdrCell = sheet.getRange(1, sumCol, 1, 2);
+      hdrCell.merge().setFontWeight('bold').setBackground('#C9A230')
+             .setFontColor('#ffffff').setHorizontalAlignment('center');
+
+      // Baris Total Uang — format sebagai currency
+      sheet.getRange(3, sumCol + 1).setNumberFormat('"Rp "#,##0');
+
+      // Border kotak
+      sumRange.setBorder(true, true, true, true, true, true,
+        '#999999', SpreadsheetApp.BorderStyle.SOLID);
+
+      // Lebar kolom L & M
+      sheet.setColumnWidth(sumCol, 160);
+      sheet.setColumnWidth(sumCol + 1, 140);
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ok:true,rows:data.rows.length}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ok:false,error:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+                </div>
+
+                <!-- URL & Sheet Name input -->
+                <div class="form-group">
+                    <label style="font-size:.82rem;font-weight:700;">Web App URL</label>
+                    <input type="url" id="sheet-script-url" class="form-control"
+                        placeholder="https://script.google.com/macros/s/..."
+                        style="font-size:.82rem;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:.82rem;font-weight:700;">Nama Sheet (tab)</label>
+                    <input type="text" id="sheet-tab-name" class="form-control"
+                        placeholder="Pesanan" value="Pesanan"
+                        style="font-size:.82rem;">
+                </div>
+
+                <div id="sync-test-result" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:var(--r-sm);font-size:.82rem;"></div>
+
+                <div style="display:flex;gap:10px;">
+                    <button class="btn btn-secondary" onclick="testSheetSync()" style="flex:1;justify-content:center;">
+                        <i class="fas fa-vial"></i> Test Koneksi
+                    </button>
+                    <button class="btn btn-primary" onclick="saveSheetSync()" style="flex:1;justify-content:center;">
+                        <i class="fas fa-save"></i> Simpan & Aktifkan
+                    </button>
+                </div>
+                <p style="font-size:.72rem;color:var(--text-3);margin-top:10px;text-align:center;">
+                    Setelah aktif, data pesanan otomatis terkirim ke spreadsheet setiap ada perubahan.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="discount-modal">
         <div class="modal-content" style="max-width:360px;">
             <div class="modal-header">
@@ -8940,6 +9054,120 @@ function generateAssignment(orderId, salaryAfterHT) {
     ===================================================== */
 
     /* ===== Discount helpers ===== */
+    /* ===== Google Sheets Live Sync ===== */
+    var _syncScriptUrl  = localStorage.getItem('b2f_sheet_url')  || '';
+    var _syncSheetName  = localStorage.getItem('b2f_sheet_name') || 'Pesanan';
+    var _syncActive     = !!_syncScriptUrl;
+
+    function _syncUpdateBtn() {
+        var el = document.getElementById('sync-sheet-status');
+        if (!el) return;
+        el.textContent = _syncActive ? '🟢 Sync Aktif' : 'Setup Sync';
+    }
+    _syncUpdateBtn();
+
+    function openSheetSyncModal() {
+        var m = document.getElementById('sheet-sync-modal');
+        document.getElementById('sheet-script-url').value = _syncScriptUrl;
+        document.getElementById('sheet-tab-name').value   = _syncSheetName;
+        document.getElementById('sync-test-result').style.display = 'none';
+        if (m.parentElement !== document.body) document.body.appendChild(m);
+        m.classList.add('active');
+    }
+    function closeSheetSyncModal() {
+        var m = document.getElementById('sheet-sync-modal');
+        if (m) m.classList.remove('active');
+    }
+
+    function copyScriptCode() {
+        var code = document.getElementById('apps-script-code').textContent;
+        navigator.clipboard.writeText(code).then(function() {
+            addNotification('success', 'Copied!', 'Kode Apps Script berhasil dicopy');
+        });
+    }
+
+    function _buildSyncPayload() {
+        if (!allOrdersData || !allOrdersData.length) return null;
+        var lunas = allOrdersData.filter(function(o) { return o.paymentStatus === 'lunas'; });
+        if (!lunas.length) return null;
+        var headers = ['No', 'Tanggal', 'Nama Pemesan', 'No. Telepon', 'List Pesanan', 'Total Harga', 'Status', 'Metode Bayar'];
+        var rows = lunas.map(function(o, i) {
+            var date  = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('id-ID') : '-';
+            var items = (o.items && o.items.length) ? o.items.map(function(it) { return it.name + ' x' + it.quantity; }).join(', ') : '-';
+            return [i + 1, date, o.customerName || '-', o.customerPhone || '-', items, o.total || 0, o.status || '-', o.paymentMethod || '-'];
+        });
+        var grandTotal = lunas.reduce(function(s, o) { return s + (o.total || 0); }, 0);
+        var summary = [
+            ['RINGKASAN', ''],
+            ['Total Pesanan Lunas', lunas.length],
+            ['Total Uang Diterima', grandTotal],
+            ['Terakhir Update', new Date().toLocaleString('id-ID')]
+        ];
+        return { sheetName: _syncSheetName, headers: headers, rows: rows, summary: summary };
+    }
+
+    async function _postToSheet(url, payload) {
+        var resp = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'text/plain' }  // avoid CORS preflight
+        });
+        var text = await resp.text();
+        try { return JSON.parse(text); } catch(e) { return { ok: false, error: text }; }
+    }
+
+    async function testSheetSync() {
+        var url   = document.getElementById('sheet-script-url').value.trim();
+        var sheet = document.getElementById('sheet-tab-name').value.trim() || 'Pesanan';
+        var res   = document.getElementById('sync-test-result');
+        if (!url) { res.style.display='block'; res.style.background='var(--red-bg)'; res.style.color='var(--red-text)'; res.textContent='⚠️ URL belum diisi.'; return; }
+        res.style.display='block'; res.style.background='var(--surface-2)'; res.style.color='var(--text-2)'; res.textContent='⏳ Mengirim data test...';
+        try {
+            var payload = _buildSyncPayload() || { sheetName: sheet, headers: ['Test'], rows: [['OK']] };
+            payload.sheetName = sheet;
+            var result = await _postToSheet(url, payload);
+            if (result && result.ok) {
+                res.style.background='var(--green-bg)'; res.style.color='var(--green-text)';
+                res.textContent = '✅ Berhasil! ' + (result.rows || 0) + ' baris terkirim ke sheet "' + sheet + '"';
+            } else {
+                res.style.background='var(--red-bg)'; res.style.color='var(--red-text)';
+                res.textContent = '❌ Gagal: ' + (result ? result.error : 'No response');
+            }
+        } catch(e) {
+            res.style.background='var(--red-bg)'; res.style.color='var(--red-text)';
+            res.textContent = '❌ Error: ' + e.message;
+        }
+    }
+
+    function saveSheetSync() {
+        var url   = document.getElementById('sheet-script-url').value.trim();
+        var sheet = document.getElementById('sheet-tab-name').value.trim() || 'Pesanan';
+        _syncScriptUrl = url; _syncSheetName = sheet; _syncActive = !!url;
+        localStorage.setItem('b2f_sheet_url',  url);
+        localStorage.setItem('b2f_sheet_name', sheet);
+        _syncUpdateBtn();
+        closeSheetSyncModal();
+        addNotification('success', 'Disimpan', _syncActive ? 'Live sync aktif ke sheet "' + sheet + '"' : 'Sync dinonaktifkan');
+        if (_syncActive) syncToSheet();
+    }
+
+    async function syncToSheet() {
+        if (!_syncActive || !_syncScriptUrl) return;
+        var payload = _buildSyncPayload();
+        if (!payload) return;
+        try {
+            var result = await _postToSheet(_syncScriptUrl, payload);
+            if (result && result.ok) {
+                console.log('[Sync] ✅ Sheets updated:', result.rows, 'rows');
+            } else {
+                console.warn('[Sync] ⚠️', result);
+            }
+        } catch(e) {
+            console.warn('[Sync] fetch error:', e.message);
+        }
+    }
+    /* ===== End Google Sheets Live Sync ===== */
+
     var _discProductId = null;
 
     function openDiscountModal(productId, currentDiscount) {
