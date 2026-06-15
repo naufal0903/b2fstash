@@ -6,7 +6,7 @@
     <title>B2F Stash - Dashboard Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/B2F.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bangers&family=Comic+Neue:wght@400;700&family=Boogaloo&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -1032,7 +1032,7 @@ body:has(.modal.active) { overflow: hidden; }
 /* ===== NOTIFICATIONS ===== */
 .notification-container {
     position: fixed; top: 18px; right: 18px;
-    z-index: 9999;
+    z-index: 10001;
     display: flex; flex-direction: column; gap: 9px;
     max-width: 370px; pointer-events: none;
 }
@@ -1470,10 +1470,18 @@ body:has(.modal.active) { overflow: hidden; }
 body.login-active { overflow: hidden; }
 body.login-active::before {
     content: '';
+    position: fixed; inset: -20px;
+    background: url('images/dol.png') center/cover no-repeat;
+    filter: blur(1px) brightness(.55);
+    z-index: 9997;
+    pointer-events: none;
+}
+body.login-active::after {
+    content: '';
     position: fixed; inset: 0;
-    background: rgba(0,0,0,.6);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    z-index: 9998; pointer-events: auto;
+    background: rgba(0,0,0,.30);
+    z-index: 9998;
+    pointer-events: auto;
 }
 
 /* ===== CONTENT SECTIONS ===== */
@@ -1572,6 +1580,198 @@ body.login-active::before {
     body.dark-mode .receipt-container,
     body.dark-mode .receipt-container * { background: #FFF !important; color: #000 !important; }
 }
+
+/* ===== COMIC THEME ACCENTS ===== */
+
+/* Override shape — more square, comic panel feel */
+:root {
+    --r-sm: 3px;
+    --r: 5px;
+    --r-lg: 8px;
+    --comic-ink: #111111;
+    --comic-shadow: 4px 4px 0 #111111;
+    --comic-shadow-hover: 6px 6px 0 #111111;
+    --comic-border: 2px solid #111111;
+}
+body.dark-mode {
+    --comic-ink: rgba(255,255,255,.85);
+    --comic-shadow: 4px 4px 0 rgba(0,0,0,.7);
+    --comic-shadow-hover: 6px 6px 0 rgba(0,0,0,.7);
+    --comic-border: 2px solid rgba(255,255,255,.22);
+}
+
+/* Halftone dot background */
+body {
+    background-image: radial-gradient(circle, rgba(201,162,48,.13) 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+}
+body.dark-mode {
+    background-image: radial-gradient(circle, rgba(201,162,48,.07) 1.2px, transparent 1.2px);
+}
+
+/* Comic fonts — each area gets its own personality */
+
+/* Body & general text → Comic Neue */
+body,
+p, td, th, input, select, textarea, label,
+.product-description, .product-stock,
+.modal-body, .form-group,
+.notification-content {
+    font-family: 'Comic Neue', 'Poppins', sans-serif;
+}
+
+/* Nav / sidebar → Boogaloo */
+.nav-link, .sidebar-footer,
+.user-info, .darkmode-btn, .logout-btn,
+.notification-settings {
+    font-family: 'Boogaloo', 'Poppins', sans-serif;
+    font-size: .95rem;
+    letter-spacing: .02em;
+}
+
+/* Buttons → Oswald (condensed, comic caption) */
+.btn {
+    font-family: 'Oswald', 'Poppins', sans-serif !important;
+    letter-spacing: .08em !important;
+}
+
+/* Headings / values / logo → Bangers */
+.page-title h2,
+.modal-header h3,
+.section-title,
+.stat-info .value,
+.logo h1,
+.product-title,
+.product-price {
+    font-family: 'Bangers', 'Poppins', sans-serif;
+    letter-spacing: .06em;
+}
+
+/* Badges → Oswald bold */
+.product-category-badge,
+.product-status-badge,
+.product-discount-badge,
+.order-status-badge,
+.status-badge {
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: .06em;
+}
+
+/* Stat cards — hard offset shadow */
+.stat-card {
+    border: var(--comic-border);
+    box-shadow: var(--comic-shadow);
+}
+.stat-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--comic-shadow-hover);
+    border-color: var(--gold);
+}
+
+/* Product cards */
+.product-card {
+    border: var(--comic-border);
+    box-shadow: var(--comic-shadow);
+}
+.product-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--comic-shadow-hover);
+}
+
+/* Top bar */
+.top-bar {
+    border: var(--comic-border);
+    box-shadow: var(--comic-shadow);
+}
+
+/* Modals */
+.modal-content {
+    border: var(--comic-border);
+    box-shadow: 6px 6px 0 var(--comic-ink);
+}
+
+/* Buttons — bold ink outline + offset shadow */
+.btn {
+    border: 2px solid var(--comic-ink);
+    box-shadow: 3px 3px 0 var(--comic-ink);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    font-size: .78rem;
+    transition: transform 100ms ease, box-shadow 100ms ease, background var(--ease);
+}
+.btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--comic-ink);
+}
+.btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--comic-ink);
+}
+
+/* Badges — inked outline */
+.product-category-badge {
+    border: 1.5px solid var(--gold);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+.product-status-badge {
+    border-width: 1.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* Table — comic panel grid */
+#products-management-table,
+#orders-table,
+#products-table {
+    border: var(--comic-border);
+    box-shadow: var(--comic-shadow);
+}
+#products-management-table th,
+#orders-table th,
+#products-table th {
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-weight: 800;
+    border-bottom: 2px solid var(--comic-ink);
+}
+
+/* Sidebar — comic panel left border */
+.sidebar {
+    border-right: 3px solid rgba(201,162,48,.4);
+}
+.nav-link.active {
+    border-left: 3px solid var(--gold);
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+/* Notification toast — speech bubble feel */
+.notification {
+    border: 2px solid var(--comic-ink);
+    box-shadow: 3px 3px 0 var(--comic-ink);
+    border-radius: 6px;
+}
+
+/* Discount badge — pop! */
+.product-discount-badge {
+    font-family: 'Bangers', sans-serif;
+    font-size: .9rem;
+    letter-spacing: .06em;
+    border: 2px solid #fff;
+    box-shadow: 2px 2px 0 #111;
+}
+
+/* Section cards / content panels */
+.content-section > div:first-child,
+.card, [class*="-card"] {
+    border-color: var(--border);
+}
+
+/* ===== END COMIC THEME ===== */
 
     </style>
 
