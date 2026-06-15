@@ -9055,16 +9055,26 @@ function generateAssignment(orderId, salaryAfterHT) {
 
     /* ===== Discount helpers ===== */
     /* ===== Google Sheets Live Sync ===== */
-    var _syncScriptUrl  = localStorage.getItem('b2f_sheet_url')  || '';
-    var _syncSheetName  = localStorage.getItem('b2f_sheet_name') || 'Pesanan';
-    var _syncActive     = !!_syncScriptUrl;
+    var _syncScriptUrl = '';
+    var _syncSheetName = 'Pesanan';
+    var _syncActive    = false;
+
+    // Load config from Firestore on init
+    firebase.firestore().collection('settings').doc('sheet_sync').get().then(function(doc) {
+        if (doc.exists) {
+            var d = doc.data();
+            _syncScriptUrl = d.url  || '';
+            _syncSheetName = d.sheet || 'Pesanan';
+            _syncActive    = !!_syncScriptUrl;
+            _syncUpdateBtn();
+        }
+    }).catch(function() {});
 
     function _syncUpdateBtn() {
         var el = document.getElementById('sync-sheet-status');
         if (!el) return;
         el.textContent = _syncActive ? '🟢 Sync Aktif' : 'Setup Sync';
     }
-    _syncUpdateBtn();
 
     function openSheetSyncModal() {
         var m = document.getElementById('sheet-sync-modal');
@@ -9143,12 +9153,16 @@ function generateAssignment(orderId, salaryAfterHT) {
         var url   = document.getElementById('sheet-script-url').value.trim();
         var sheet = document.getElementById('sheet-tab-name').value.trim() || 'Pesanan';
         _syncScriptUrl = url; _syncSheetName = sheet; _syncActive = !!url;
-        localStorage.setItem('b2f_sheet_url',  url);
-        localStorage.setItem('b2f_sheet_name', sheet);
-        _syncUpdateBtn();
-        closeSheetSyncModal();
-        addNotification('success', 'Disimpan', _syncActive ? 'Live sync aktif ke sheet "' + sheet + '"' : 'Sync dinonaktifkan');
-        if (_syncActive) syncToSheet();
+        firebase.firestore().collection('settings').doc('sheet_sync').set({ url: url, sheet: sheet })
+            .then(function() {
+                _syncUpdateBtn();
+                closeSheetSyncModal();
+                addNotification('success', 'Disimpan', _syncActive ? 'Live sync aktif — semua admin terhubung ke sheet "' + sheet + '"' : 'Sync dinonaktifkan');
+                if (_syncActive) syncToSheet();
+            })
+            .catch(function(e) {
+                addNotification('error', 'Error', 'Gagal menyimpan config: ' + e.message);
+            });
     }
 
     async function syncToSheet() {
